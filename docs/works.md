@@ -1,16 +1,3 @@
----
-title: Vite
-titleTemplate: Next Generation Frontend Tooling
-# add `dark` here to apply dark mode on initial load,
-# since `onMounted` doesn't run during SSR
-pageClass: landing dark
-
-layout: works
-aside: false
-editLink: false
-markdownStyles: false
-
----
 
 <script setup>
 import { useData } from 'vitepress'
@@ -20,7 +7,7 @@ import Hero from './.vitepress/theme/1. hero-section/HeroSection.vue'
 
 import FrameworksSection from './.vitepress/theme/3. frameworks-section/FrameworksSection.vue'
 
-import Layout from './.vitepress/theme/Layout.vue'
+import ProposalStack from './.vitepress/theme/components/ProposalStack.vue'
 
 const { isDark } = useData()
 
@@ -35,6 +22,7 @@ onBeforeUnmount(() => {
 <div class="VPHome">
 
 
-  <Layout/>
-  <FrameworksSection />
+  <ProposalStack/>
+
+
 </div>

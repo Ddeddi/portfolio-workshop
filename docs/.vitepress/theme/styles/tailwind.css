@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Small helpers to reproduce a few used tokens from the original custom.css
+   Avoid using `@apply` here to prevent issues with CSS modules or
+   different Tailwind/PostCSS versions; use standard CSS fallbacks instead. */
+:root {
+  --vp-c-brand: #ef7234;
+}
+
+.vp-doc-figure-caption {
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  color: #6b7280; /* text-gray-500 */
+  line-height: 1.25rem; /* leading-5 */
+}
+
+.vp-button-brand {
+  display: inline-block;
+  border-radius: 9999px;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-weight: 600;
+  background-color: #f97316; /* orange-500 fallback */
+  color: white;
+}

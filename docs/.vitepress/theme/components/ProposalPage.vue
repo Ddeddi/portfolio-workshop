@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useRoute, withBase } from 'vitepress'
-import { ref, computed } from 'vue'
+import { withBase, useRouter } from 'vitepress'
+import { ref, computed, onMounted } from 'vue'
 
 type Card = {
   slug: string
@@ -62,14 +62,13 @@ for (const path in markdownFiles) {
   })
 }
 
-const route = useRoute()
+const router = useRouter()
 
-// Current slug from query string (?id=slug)
-const currentSlug = computed(() => {
-  // make this computed react to route changes (SPA navigation)
-  const _ = route.path
+// 👇 this is the *actual* selected work
+const currentSlug = ref<string | undefined>(cards.value[0]?.slug)
 
-  // SSR: no window → use first card
+// helper to read slug from current URL (?id=slug)
+function getSlugFromLocation(): string | undefined {
   if (typeof window === 'undefined') {
     return cards.value[0]?.slug
   }
@@ -77,7 +76,20 @@ const currentSlug = computed(() => {
   const params = new URLSearchParams(window.location.search)
   const id = params.get('id')
   return id || cards.value[0]?.slug
+}
+
+// initial selection when page loads (including from ProposalStack)
+onMounted(() => {
+  currentSlug.value = getSlugFromLocation()
 })
+
+// when user clicks in the sidebar
+function selectCard(slug: string, routePath: string) {
+  currentSlug.value = slug
+
+  // keep the URL in sync (and let VitePress do SPA navigation)
+  router.go(withBase(routePath))
+}
 
 const currentCard = computed(() =>
   cards.value.find(card => card.slug === currentSlug.value)
@@ -98,6 +110,7 @@ const currentCard = computed(() =>
         >
           <a
             :href="withBase(card.route)"
+            @click.prevent="selectCard(card.slug, card.route)"
             class="flex items-center gap-3 p-2 rounded-lg bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
           >
             <img

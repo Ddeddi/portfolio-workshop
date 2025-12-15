@@ -14,6 +14,9 @@
         willChange: 'transform'
       }"
     >
+      <!-- Center visual marker -->
+      <div class="absolute w-3 h-3 rounded-full bg-stone-400/30 shadow-inner"></div>
+
       <!-- Project Names in Circle -->
       <div
         v-for="(project, index) in projects"
@@ -248,14 +251,19 @@ function animate() {
 function initialNudge() {
   if (prefersReducedMotion.value) return;
 
-  targetRotation.value = 15;
+  // Gentle rotation hint
+  targetRotation.value = 12;
+  setTimeout(() => {
+    targetRotation.value = -8;
+  }, 600);
+  
   setTimeout(() => {
     targetRotation.value = 0;
-  }, 800);
+  }, 1200);
 
   setTimeout(() => {
     showHint.value = false;
-  }, 3000);
+  }, 3500);
 }
 
 // Lifecycle

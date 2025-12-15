@@ -1,15 +1,18 @@
 <template>
   <div
     ref="containerRef"
-    class="relative w-full h-[600px] md:h-[700px] flex items-center justify-center select-none touch-none"
+    class="relative w-full h-[500px] md:h-[600px] lg:h-[650px] flex items-center justify-center select-none touch-none overflow-hidden"
     @wheel="handleWheel"
     @mousedown="handlePointerDown"
     @touchstart="handlePointerDown"
   >
     <!-- Main Circle Container -->
     <div
-      class="relative w-full h-full flex items-center justify-center"
-      :style="{ transform: `rotate(${currentRotation}deg)` }"
+      class="relative w-full h-full flex items-center justify-center transition-transform"
+      :style="{ 
+        transform: `rotate(${currentRotation}deg)`,
+        willChange: 'transform'
+      }"
     >
       <!-- Project Names in Circle -->
       <div
@@ -23,9 +26,9 @@
       >
         <a
           :href="project.href"
-          class="project-name block transition-all duration-300"
+          class="project-name block transition-all duration-300 font-medium"
           :class="{
-            'text-stone-400 hover:text-stone-900': true,
+            'text-stone-500 hover:text-stone-950': true,
             'project-hovered': hoveredProject === project.slug,
           }"
           :style="getTextStyle(index)"
@@ -39,14 +42,15 @@
     <div
       v-if="hoveredProject && !isMobile"
       ref="previewRef"
-      class="fixed pointer-events-none z-50 rounded-lg overflow-hidden shadow-2xl"
+      class="fixed pointer-events-none z-50 rounded-xl overflow-hidden shadow-2xl border-2 border-white/20"
       :style="{
         left: `${previewPosition.x}px`,
         top: `${previewPosition.y}px`,
-        transform: 'translate(-50%, -50%)',
+        transform: `translate(-50%, -50%) scale(${previewOpacity})`,
         opacity: previewOpacity,
-        width: '280px',
-        height: '200px',
+        width: '320px',
+        height: '220px',
+        transition: 'opacity 0.2s ease-out',
       }"
     >
       <img
@@ -66,9 +70,9 @@
     <!-- Subtle hint animation overlay (only on mount) -->
     <div
       v-if="showHint"
-      class="absolute inset-0 flex items-center justify-center pointer-events-none"
+      class="absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-none"
     >
-      <div class="text-stone-400 text-sm opacity-50 animate-pulse">
+      <div class="text-stone-400 text-xs md:text-sm opacity-60 animate-pulse tracking-wide">
         Scroll or drag to explore
       </div>
     </div>
@@ -115,8 +119,11 @@ const hoveredProjectData = computed(() => {
 
 // Circle layout calculations
 const radius = computed(() => {
-  if (typeof window === 'undefined') return 200;
-  return Math.min(window.innerWidth, window.innerHeight) * 0.35;
+  if (typeof window === 'undefined') return 220;
+  const minDimension = Math.min(window.innerWidth, window.innerHeight);
+  // More responsive radius based on screen size
+  if (window.innerWidth < 768) return minDimension * 0.32;
+  return minDimension * 0.38;
 });
 
 function getProjectStyle(index: number) {
@@ -140,12 +147,17 @@ function getTextStyle(index: number) {
   const baseRotation = -currentRotation.value;
 
   // Add slight text warping/deformation
-  const warp = Math.sin(index * 0.5) * 2;
+  const warp = Math.sin(index * 0.5) * 3;
+
+  // Responsive font sizing
+  const baseFontSize = typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 1.3;
+  const fontSize = baseFontSize + Math.abs(Math.sin(index * 0.3)) * 0.5;
 
   return {
     transform: `rotate(${angle + baseRotation + warp}deg)`,
-    fontSize: `${1.2 + Math.abs(Math.sin(index * 0.3)) * 0.4}rem`,
+    fontSize: `${fontSize}rem`,
     fontWeight: 500 + Math.floor(Math.abs(Math.cos(index * 0.7)) * 200),
+    letterSpacing: '0.02em',
   };
 }
 
@@ -291,13 +303,24 @@ onBeforeUnmount(() => {
 .project-name {
   cursor: pointer;
   text-shadow: 0 0 20px rgba(0, 0, 0, 0);
-  transition: text-shadow 0.3s ease, color 0.3s ease;
+  transition: text-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
+  filter: blur(0px);
+}
+
+.project-name:hover {
+  transform: scale(1.05);
 }
 
 .project-hovered {
-  color: #000 !important;
-  text-shadow: 0 0 25px rgba(168, 85, 247, 0.4), 0 0 50px rgba(168, 85, 247, 0.2);
+  color: #0c0a09 !important;
+  text-shadow: 
+    0 0 30px rgba(120, 113, 108, 0.5),
+    0 0 60px rgba(168, 162, 158, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+  font-weight: 700 !important;
 }
 
 /* Prevent text selection during drag */
@@ -315,5 +338,15 @@ onBeforeUnmount(() => {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Hide scrollbar for container */
+div::-webkit-scrollbar {
+  display: none;
+}
+
+div {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 </style>

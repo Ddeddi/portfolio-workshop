@@ -174,8 +174,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 }
 
 .project-title {
-  color: #0033ffff;
-  font-family: ";
+  color: #0033ff;
   font-family: "garamond-atf-text", serif;
   text-decoration: none;
   font-weight: 600;
@@ -184,7 +183,8 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 
 .project-title:hover {
   color: #3355ff;
-  text-decoration: underline;}
+  text-decoration: underline;
+}
 
 .project-status {
   color: #888;
@@ -216,10 +216,10 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 }
 
 .project-entry:hover .project-tag {
-  border-color: #0033ffff;
-  color: #0033ffff;
-};
-  color: #0033
+  border-color: #0033ff;
+  color: #0033ff;
+}
+
 /* Description (hidden by default) */
 .project-description {
   margin: 0.5rem 0 0 4.5rem;

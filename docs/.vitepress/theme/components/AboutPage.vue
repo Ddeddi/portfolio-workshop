@@ -3,6 +3,8 @@ import { useRoute } from "vitepress";
 import { computed } from "vue";
 import NavBar from "./NavBar.vue";
 
+<link rel="stylesheet" href="https://use.typekit.net/jpd1xno.css">
+
 const route = useRoute();
 const currentPath = computed(() => route.path.replace(/\/$/, ""));
 
@@ -62,7 +64,7 @@ const links = [
   right: 0;
   bottom: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 120px 40px rgba(191, 216, 125, 0.15);
+  box-shadow: inset 0 0 120px 40px rgba(188, 235, 60, 1);
   z-index: 1;
 }
 
@@ -151,9 +153,9 @@ const links = [
 .about-content :deep(.prose h2),
 .about-content :deep(.prose h3) {
   color: var(--theme-text, #ddd);
-  font-family: "petala-pro", sans-serif;
-  font-weight: 900;
-  letter-spacing: -0.02em;
+  font-family: "garamond-atf-text", serif;
+  font-weight: 600;
+  font-style: italic;
 }
 
 .about-content :deep(.prose a) {

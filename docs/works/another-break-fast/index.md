@@ -2,7 +2,6 @@
 title: Another <br> fast
 year: 2025
 status: ongoing
-collaborators: Jane Doe, John Smith
 tags: [installation, performance, ritual]
 description: If your routine would disfunction how would you react..
 ---

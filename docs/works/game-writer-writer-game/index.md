@@ -1,9 +1,25 @@
+---
+title: Your Project Title
+year: 2024
+status: archived
+collaborators: Yunus Dikici, Svenja Meierkord 
+tags: [interactive installation, game, interaction]
+---
+
 # Game Writer Writer Game 
 ## Andrea Wapler 
 
 
 ## Abstract
-Les sables mouvants, appelés aussi lises[1], sont des zones de sol semblant résistantes, mais ne pouvant supporter une certaine pression. Ils apparaissent sous certaines configurations comme un phénomène naturel.
+Writer Game ist eine interaktive Installation. Sie besteht aus einer
+elektrischen Schreibmaschine, die mithilfe eines Arduino nicht nur eine
+Input-, sondern auch eine Output-Funktion abbilden kann. Somit lässt
+sich ein textbasiertes Spiel in Anlehnung an ein Textadventure mit der
+Schreibmaschine spielen, in dem die Spieler*innen Rätsel lösen müssen.
+Die Installation rekonstruiert einen Dialog zwischen Mensch und
+Maschine. Die Spieler*innen können mithilfe von Texteingaben das Spiel
+steuern und bekommen die Antworten von der Maschine als gedruckte
+Ausgabe.
 
 
 

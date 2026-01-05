@@ -1,6 +1,6 @@
 <template>
   <div class="w-full max-w-6xl mx-auto p-6">
-    <Carousel :slides="slides" autoplay :interval="5000" loop />
+    <ProjectCircle :projects="circleProjects" />
 
     <div class="mt-10 space-y-8">
       <div
@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { withBase } from "vitepress";
-import Carousel from "./Carousel.vue";
+import ProjectCircle from "./ProjectCircle.vue";
 
 type Card = {
   slug: string;
@@ -81,11 +81,12 @@ for (const path in markdownFiles) {
   });
 }
 
-// Create slides for Carousel
-const slides = cards.value.map((card) => ({
-  image: card.image,
+// Create projects for ProjectCircle
+const circleProjects = cards.value.map((card) => ({
+  slug: card.slug,
   title: card.title,
   href: withBase(card.route),
+  image: card.image,
 }));
 </script>
 

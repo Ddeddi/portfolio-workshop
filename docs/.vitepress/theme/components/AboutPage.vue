@@ -62,8 +62,9 @@ const links = [
   right: 0;
   bottom: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 120px 40px rgba(183, 237, 33, 1);
-  z-index: 1;
+  box-shadow: inset 0 0 100px 50px rgba(183, 237, 33, 0.6);
+  z-index: -1;
+  filter: blur(40px);
 }
 
 .about-sidebar {

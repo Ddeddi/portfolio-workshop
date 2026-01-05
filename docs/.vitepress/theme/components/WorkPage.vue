@@ -85,14 +85,13 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 <style scoped>
 .archive-container {
   min-height: 100vh;
-  background-color: var(--theme-bg, #2f2e2e);
-  color: var(--theme-text, #ffffff);
+  background-color: #0a0a0a;
+  color: #e0e0e0;
   padding: 3rem 2rem;
   font-family: "garamond-atf-text", serif;
   font-size: 0.95rem;
   line-height: 1.6;
   position: relative;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .archive-container::before {
@@ -103,8 +102,9 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   right: 0;
   bottom: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 120px 40px rgba(191, 216, 125, 0.15);
-  z-index: 1;
+  box-shadow: inset 0 0 100px 50px rgba(191, 216, 125, 0.6);
+  z-index: -1;
+  filter: blur(40px);
 }
 
 /* Header */
@@ -201,12 +201,12 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 }
 
 .project-status {
-  color: var(--theme-text-muted, #888);
+  color: #888;
   font-size: 0.85rem;
 }
 
 .project-with {
-  color: var(--theme-text-muted, #999);
+  color: #999;
   font-size: 0.9rem;
   font-style: italic;
 }
@@ -223,9 +223,8 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   color: #666;
   font-size: 0.8rem;
   padding: 0.1rem 0.5rem;
-  background-color: var(--theme-bg, #2f2e2e);
-  filter: brightness(0.9);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: #1a1a1a;
+  border: 1px solid #333;
   border-radius: 3px;
   transition: all 0.2s ease;
 }
@@ -238,7 +237,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 /* Description (hidden by default) */
 .project-description {
   margin: 0.5rem 0 0 4.5rem;
-  color: var(--theme-text-muted, #aaa);
+  color: #aaa;
   font-size: 0.9rem;
   font-style: italic;
   max-height: 0;

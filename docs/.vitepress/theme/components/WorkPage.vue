@@ -1,157 +1,297 @@
 <script setup lang="ts">
-import { withBase, useRouter } from 'vitepress'
-import { ref, computed, onMounted } from 'vue'
+import { withBase } from 'vitepress'
+import { ref } from 'vue'
 
-type Card = {
+type Project = {
   slug: string
   title: string
-  name: string
-  excerpt: string
-  route: string   // `/works/?id=slug`
-  image: string | null
-  component: any
+  year: string
+  status: string
+  collaborators: string
+  tags: string[]
+  description: string
+  route: string
 }
 
-// 1) Markdown as Vue components
-const markdownModules = import.meta.glob('../../../works/**/index.md', {
-  eager: true
-})
-
-// 2) Raw markdown text for meta (title, name, excerpt)
+// Raw markdown text for parsing frontmatter and content
 const markdownFiles = import.meta.glob('../../../works/**/index.md', {
   as: 'raw',
   eager: true
 })
 
-// Images
-const imageFiles = import.meta.glob('../../../works/**/cover.{jpg,jpeg,png,webp}', {
-  eager: true,
-  import: 'default'
-})
+const projects = ref<Project[]>([])
 
-const cards = ref<Card[]>([])
+// Simple frontmatter parser
+function parseFrontmatter(raw: string) {
+  const fmMatch = raw.match(/^---\n([\s\S]*?)\n---/)
+  if (!fmMatch) return {}
+  
+  const fmText = fmMatch[1]
+  const data: Record<string, any> = {}
+  
+  fmText.split('\n').forEach(line => {
+    const colonIdx = line.indexOf(':')
+    if (colonIdx === -1) return
+    
+    const key = line.slice(0, colonIdx).trim()
+    let value = line.slice(colonIdx + 1).trim()
+    
+    // Handle arrays (tags)
+    if (value.startsWith('[') && value.endsWith(']')) {
+      value = value.slice(1, -1).split(',').map(v => v.trim().replace(/['"]/g, ''))
+    }
+    
+    data[key] = value
+  })
+  
+  return data
+}
 
 for (const path in markdownFiles) {
   const raw = markdownFiles[path] as string
+  const frontmatter = parseFrontmatter(raw)
   const lines = raw.split('\n')
 
   const titleLine = lines.find(line => line.startsWith('# '))
-  const nameLine = lines.find(line => line.startsWith('## '))
-  const excerptLine = lines.find(line => line.trim() && !line.startsWith('#'))
-
-  // e.g. docs/works/my-work/index.md -> slug = "my-work"
   const match = path.match(/works\/([^/]+)\/index\.md$/)
   const slug = match?.[1] ?? ''
 
-  // We stay on /works and switch via ?id=slug
   const route = `/works/?id=${slug}`
 
-  const folder = path.replace(/\/index\.md$/, '/')
-  const imageKey = Object.keys(imageFiles).find(k => k.startsWith(folder))
-
-  const mod = markdownModules[path] as any
-
-  cards.value.push({
+  projects.value.push({
     slug,
-    title: titleLine?.replace(/^# /, '') || 'Untitled',
-    name: nameLine?.replace(/^## /, '') || 'Anonymous',
-    excerpt: excerptLine || '',
-    route,
-    image: imageKey ? (imageFiles[imageKey] as string) : null,
-    component: mod?.default || null
+    title: frontmatter.title || titleLine?.replace(/^# /, '') || 'Untitled',
+    year: frontmatter.year || '????',
+    status: frontmatter.status || 'archived',
+    collaborators: frontmatter.collaborators || frontmatter.with || '',
+    tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : (frontmatter.tags ? [frontmatter.tags] : []),
+    description: frontmatter.description || 'An experimental project.',
+    route
   })
 }
 
-const router = useRouter()
-
-// 👇 this is the *actual* selected work
-const currentSlug = ref<string | undefined>(cards.value[0]?.slug)
-
-// helper to read slug from current URL (?id=slug)
-function getSlugFromLocation(): string | undefined {
-  if (typeof window === 'undefined') {
-    return cards.value[0]?.slug
-  }
-
-  const params = new URLSearchParams(window.location.search)
-  const id = params.get('id')
-  return id || cards.value[0]?.slug
-}
-
-// initial selection when page loads (including from WorkStack)
-onMounted(() => {
-  currentSlug.value = getSlugFromLocation()
-})
-
-// when user clicks in the sidebar
-function selectCard(slug: string, routePath: string) {
-  currentSlug.value = slug
-
-  // keep the URL in sync (and let VitePress do SPA navigation)
-  router.go(withBase(routePath))
-}
-
-const currentCard = computed(() =>
-  cards.value.find(card => card.slug === currentSlug.value)
-)
+// Sort by year (most recent first)
+projects.value.sort((a, b) => b.year.localeCompare(a.year))
 </script>
 
-<template>
-  <div class="flex flex-col lg:flex-row min-h-[80vh] border border-gray-400 rounded-2xl overflow-hidden shadow-lg">
-    <!-- Sidebar -->
-    <aside class="w-full lg:w-1/4 bg-gray-100 border-r border-gray-400 p-4 space-y-4 overflow-auto">
-      <h2 class="text-xl font-bold mb-2 text-gray-900">Proposals</h2>
-      <ul class="space-y-3">
-        <li
-          v-for="card in cards"
-          :key="card.slug"
-          class="rounded-lg transition hover:scale-[1.02]"
-          :class="{ 'ring-2 ring-gray-700': card.slug === currentSlug }"
-        >
-          <a
-            :href="withBase(card.route)"
-            @click.prevent="selectCard(card.slug, card.route)"
-            class="flex items-center gap-3 p-2 rounded-lg bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-          >
-            <img
-              v-if="card.image"
-              :src="card.image"
-              alt="cover"
-              class="w-12 h-12 object-cover rounded border border-gray-400"
-            />
-            <div>
-              <div class="text-sm font-semibold text-gray-900 leading-snug">
-                {{ card.title }}
-              </div>
-              <div class="text-xs text-gray-600">{{ card.name }}</div>
-            </div>
-          </a>
-        </li>
-      </ul>
-    </aside>
+<style scoped>
+.archive-container {
+  min-height: 80vh;
+  background-color: #0a0a0a;
+  color: #e0e0e0;
+  padding: 3rem 2rem;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
 
-    <!-- Markdown Content -->
-    <section class="w-full bg-white lg:w-3/4 p-6 overflow-auto">
-      <div v-if="currentCard">
-        <div v-if="currentCard.image" class="mb-6">
-          <img
-            :src="currentCard.image"
-            alt="cover image"
-            class="w-full max-h-96 object-cover rounded border border-gray-400"
-          />
+/* Header */
+.archive-header {
+  max-width: 1200px;
+  margin: 0 auto 4rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #333;
+}
+
+.archive-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #00d4ff;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.cursor-blink {
+  animation: blink 1.2s infinite;
+  color: #00d4ff;
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.archive-manifesto {
+  font-size: 0.95rem;
+  color: #888;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Project List */
+.project-list {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.project-entry {
+  padding: 0.75rem 1rem;
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.project-entry:hover {
+  background-color: #111;
+  border-left-color: #00d4ff;
+  padding-left: 1.5rem;
+}
+
+.project-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+
+.project-year {
+  color: #666;
+  font-weight: 500;
+  min-width: 3rem;
+}
+
+.project-separator {
+  color: #333;
+}
+
+.project-title {
+  color: #00d4ff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.project-title:hover {
+  color: #00ffff;
+  text-decoration: underline;
+}
+
+.project-status {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.project-with {
+  color: #999;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* Meta & Tags */
+.project-meta {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0.25rem 4.5rem;
+  flex-wrap: wrap;
+}
+
+.project-tag {
+  color: #666;
+  font-size: 0.8rem;
+  padding: 0.1rem 0.5rem;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.project-entry:hover .project-tag {
+  border-color: #00d4ff;
+  color: #00d4ff;
+}
+
+/* Description (hidden by default) */
+.project-description {
+  margin: 0.5rem 0 0 4.5rem;
+  color: #aaa;
+  font-size: 0.9rem;
+  font-style: italic;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.project-entry:hover .project-description {
+  max-height: 100px;
+  opacity: 1;
+  margin-top: 0.75rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .archive-container {
+    padding: 2rem 1rem;
+  }
+
+  .archive-title {
+    font-size: 1.5rem;
+  }
+
+  .project-line {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .project-meta,
+  .project-description {
+    margin-left: 0;
+  }
+
+  .project-entry:hover {
+    padding-left: 1rem;
+  }
+}
+</style>
+
+<template>
+  <div class="archive-container">
+    <!-- Header -->
+    <header class="archive-header">
+      <h1 class="archive-title">/projects<span class="cursor-blink">_</span></h1>
+      <p class="archive-manifesto">A living archive of experiments, collaborations, and unfinished thoughts.</p>
+    </header>
+
+    <!-- Project List -->
+    <div class="project-list">
+      <div
+        v-for="project in projects"
+        :key="project.slug"
+        class="project-entry"
+      >
+        <div class="project-line">
+          <span class="project-year">{{ project.year }}</span>
+          <span class="project-separator">→</span>
+          <a 
+            :href="withBase(project.route)" 
+            class="project-title"
+          >
+            {{ project.title }}
+          </a>
+          <span class="project-status">[{{ project.status }}]</span>
+          <span v-if="project.collaborators" class="project-with">
+            with: {{ project.collaborators }}
+          </span>
+        </div>
+        
+        <div class="project-meta">
+          <span
+            v-for="tag in project.tags"
+            :key="tag"
+            class="project-tag"
+          >
+            {{ tag }}
+          </span>
         </div>
 
-        <!-- Render markdown component directly -->
-        <component
-          v-if="currentCard.component"
-          :is="currentCard.component"
-          class="prose prose-base md:prose-lg max-w-none"
-        />
+        <div class="project-description">
+          {{ project.description }}
+        </div>
       </div>
-
-      <div v-else class="text-gray-500">
-        Work not found.
-      </div>
-    </section>
+    </div>
   </div>
 </template>

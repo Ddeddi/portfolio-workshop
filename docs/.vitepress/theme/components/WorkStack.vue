@@ -104,7 +104,7 @@ const slides = cards.value.map((card) => ({
   bottom: 0;
   pointer-events: none;
   box-shadow: inset 0 0 100px 50px rgba(188, 235, 60, 0.6);
-  z-index: -1;
+  z-index: 0;
   filter: blur(40px);
 }
 

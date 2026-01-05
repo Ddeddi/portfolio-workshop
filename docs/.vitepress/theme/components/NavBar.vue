@@ -1,30 +1,159 @@
 <script setup lang="ts">
-import { useData, withBase } from 'vitepress'
+import { useData, withBase, useRoute } from "vitepress";
+import { computed } from "vue";
 
-const { theme } = useData()
-const nav = theme.value.nav || []
+const { theme } = useData();
+const route = useRoute();
+const nav = theme.value.nav || [];
+
+const isActive = (link: string) => {
+  const currentPath = route.path.replace(/\/$/, "");
+  const navPath = link.replace(/\/$/, "");
+  return (
+    currentPath === navPath ||
+    (navPath !== "" && currentPath.startsWith(navPath))
+  );
+};
 </script>
 
 <template>
-  <header class="border-b border-black bg-white">
-    <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-      <div class="text-lg font-bold tracking-tight">
-        Portfolio
+  <header class="archive-header">
+    <nav class="archive-nav">
+      <!-- Repository-style breadcrumb -->
+      <div class="archive-breadcrumb">
+        <span class="archive-repo-name">~/portfolio</span>
+        <span class="archive-separator">/</span>
+        <span class="archive-ref">main</span>
       </div>
 
-      <ul class="flex gap-4 text-sm font-medium">
-        <li
-          v-for="item in nav"
-          :key="item.link"
-        >
+      <!-- Navigation links -->
+      <ul class="archive-nav-links">
+        <li v-for="item in nav" :key="item.link">
           <a
             :href="withBase(item.link)"
-            class="px-3 py-1 rounded-full border border-black hover:bg-black hover:text-white transition"
+            class="archive-link"
+            :class="{ 'archive-link-active': isActive(item.link) }"
           >
-            {{ item.text }}
+            <span class="link-bracket">[</span>{{ item.text
+            }}<span class="link-bracket">]</span>
           </a>
         </li>
       </ul>
     </nav>
   </header>
 </template>
+
+<style scoped>
+.archive-header {
+  background-color: #0a0a0a;
+  border-bottom: 1px solid #1a1a1a;
+  font-family: "garamond-atf-text", serif;
+  font-weight: 400;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+
+.archive-nav {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.archive-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #999;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.archive-repo-name {
+  color: #666;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.archive-separator {
+  color: #333;
+}
+
+.archive-ref {
+  color: #555;
+  font-family: monospace;
+  font-size: 0.85rem;
+  padding: 0.1rem 0.4rem;
+  background: #1a1a1a;
+  border-radius: 3px;
+}
+
+.archive-nav-links {
+  display: flex;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.archive-link {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  color: #888;
+  text-decoration: none;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  transition: all 0.2s ease;
+  border-radius: 2px;
+  position: relative;
+}
+
+.archive-link:hover {
+  color: #0033ff;
+  background: rgba(0, 51, 255, 0.05);
+}
+
+.archive-link-active {
+  color: #0033ff;
+}
+
+.archive-link-active .link-bracket {
+  color: #0033ff;
+}
+
+.link-bracket {
+  color: #333;
+  transition: color 0.2s ease;
+  font-weight: 300;
+}
+
+.archive-link:hover .link-bracket {
+  color: #0033ff;
+}
+
+@media (max-width: 768px) {
+  .archive-nav {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .archive-breadcrumb {
+    font-size: 0.8rem;
+  }
+
+  .archive-nav-links {
+    gap: 0.5rem;
+  }
+
+  .archive-link {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.7rem;
+  }
+}
+</style>

@@ -1,41 +1,155 @@
 <script setup lang="ts">
-import { useRoute } from 'vitepress'
-import { computed } from 'vue'
+import { useRoute } from "vitepress";
+import { computed } from "vue";
+import NavBar from "./NavBar.vue";
 
-const route = useRoute()
-const currentPath = computed(() => route.path.replace(/\/$/, ''))
+const route = useRoute();
+const currentPath = computed(() => route.path.replace(/\/$/, ""));
 
 // Sidebar custom navigation links
 const links = [
-  { title: 'Vitepress', path: 'https://vitepress.dev/guide/what-is-vitepress' },
-  { title: 'Tailwind CSS', path: 'https://tailwindcss.com/' }
-]
+  { title: "Vitepress", path: "https://vitepress.dev/guide/what-is-vitepress" },
+  { title: "Tailwind CSS", path: "https://tailwindcss.com/" },
+];
 </script>
 
 <template>
-  <div class="flex flex-col lg:flex-row min-h-[80vh] border border-black rounded-2xl overflow-hidden shadow-md">
-    <!-- Sidebar -->
-    <aside class="w-full lg:w-1/4 bg-white border-r border-black p-4 space-y-4">
-      <h2 class="text-xl font-bold mb-4">Useful links</h2>
-      <ul class="space-y-2">
-        <li
-          v-for="link in links"
-          :key="link.path"
-        >
-          <a
-            :href="link.path"
-            class="block px-3 py-2 border border-black rounded text-sm font-medium text-black hover:bg-black hover:text-white transition"
-            :class="{ 'bg-black text-white': currentPath === link.path.replace(/\/$/, '') }"
-          >
-            {{ link.title }}
-          </a>
-        </li>
-      </ul>
-    </aside>
+  <NavBar />
+  <div class="about-page-container">
+    <div
+      class="flex flex-col lg:flex-row min-h-[80vh] border border-stone-800 rounded overflow-hidden"
+    >
+      <!-- Sidebar -->
+      <aside class="about-sidebar">
+        <h2 class="sidebar-title">References</h2>
+        <ul class="sidebar-links">
+          <li v-for="link in links" :key="link.path">
+            <a
+              :href="link.path"
+              class="sidebar-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="link-arrow">→</span> {{ link.title }}
+            </a>
+          </li>
+        </ul>
+      </aside>
 
-    <!-- Markdown Content -->
-    <section class="bg-white w-full lg:w-3/4 p-6 overflow-auto break-words overflow-x-hidden">
-      <Content class="prose prose-base md:prose-lg max-w-none break-words" />
-    </section>
+      <!-- Markdown Content -->
+      <section class="about-content">
+        <Content class="prose prose-base md:prose-lg max-w-none break-words" />
+      </section>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.about-page-container {
+  background-color: #0a0a0a;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: "garamond-atf-text", serif;
+}
+
+.about-sidebar {
+  width: 100%;
+  background: #111;
+  border-right: 1px solid #222;
+  padding: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .about-sidebar {
+    width: 25%;
+  }
+}
+
+.sidebar-title {
+  font-size: 0.85rem;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.sidebar-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  color: #888;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  border-radius: 2px;
+}
+
+.sidebar-link:hover {
+  color: #0033ff;
+  background: rgba(0, 51, 255, 0.05);
+}
+
+.link-arrow {
+  color: #333;
+  transition: color 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.sidebar-link:hover .link-arrow {
+  color: #0033ff;
+  transform: translateX(2px);
+}
+
+.about-content {
+  background: #0f0f0f;
+  width: 100%;
+  padding: 2rem;
+  overflow: auto;
+  color: #ccc;
+}
+
+@media (min-width: 1024px) {
+  .about-content {
+    width: 75%;
+  }
+}
+
+.about-content :deep(.prose) {
+  color: #ccc;
+}
+
+.about-content :deep(.prose h1),
+.about-content :deep(.prose h2),
+.about-content :deep(.prose h3) {
+  color: #ddd;
+  font-family: "garamond-atf-text", serif;
+}
+
+.about-content :deep(.prose a) {
+  color: #0033ff;
+  text-decoration: none;
+}
+
+.about-content :deep(.prose a:hover) {
+  text-decoration: underline;
+}
+
+.about-content :deep(.prose code) {
+  color: #aaa;
+  background: #1a1a1a;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+</style>

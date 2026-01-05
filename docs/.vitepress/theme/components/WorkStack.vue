@@ -1,24 +1,19 @@
 <template>
-  <div class="w-full max-w-6xl mx-auto p-6">
+  <NavBar />
+  <div class="workstack-container">
     <Carousel :slides="slides" autoplay :interval="5000" loop />
 
-    <div class="mt-10 space-y-8">
-      <div
-        v-for="card in cards"
-        :key="card.slug"
-        class="w-full rounded-xl border border-gray-300 bg-white shadow-sm p-6"
-      >
-        <h2 class="text-2xl font-semibold text-gray-900 mb-2">
+    <div class="workstack-grid">
+      <div v-for="card in cards" :key="card.slug" class="work-card">
+        <h2 class="work-title">
           {{ card.title }}
         </h2>
-        <h3 class="text-md font-medium text-gray-600 mb-4">{{ card.name }}</h3>
+        <h3 class="work-author">{{ card.name }}</h3>
 
-        <p class="text-gray-700 mb-4">{{ card.excerpt }}</p>
+        <p class="work-excerpt">{{ card.excerpt }}</p>
 
-        <a
-          :href="withBase(card.route)"
-          class="text-blue-600 hover:underline text-sm font-medium"
-          >View more →</a
+        <a :href="withBase(card.route)" class="work-link"
+          >View more <span class="arrow">→</span></a
         >
       </div>
     </div>
@@ -29,6 +24,7 @@
 import { ref } from "vue";
 import { withBase } from "vitepress";
 import Carousel from "./Carousel.vue";
+import NavBar from "./NavBar.vue";
 
 type Card = {
   slug: string;
@@ -89,5 +85,88 @@ const slides = cards.value.map((card) => ({
 }));
 </script>
 
-<style scoped></style>
+<style scoped>
+.workstack-container {
+  background-color: #0a0a0a;
+  min-height: 100vh;
+  padding: 3rem 2rem;
+  font-family: "garamond-atf-text", serif;
+}
 
+.workstack-grid {
+  max-width: 1200px;
+  margin: 3rem auto 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.work-card {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 4px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.work-card:hover {
+  background: rgba(0, 51, 255, 0.03);
+  border-color: #0033ff;
+  transform: translateY(-2px);
+}
+
+.work-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ddd;
+  margin: 0 0 0.5rem;
+  font-family: "garamond-atf-text", serif;
+}
+
+.work-author {
+  font-size: 1rem;
+  color: #888;
+  margin: 0 0 1.25rem;
+  font-weight: 400;
+}
+
+.work-excerpt {
+  color: #aaa;
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.work-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #0033ff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.work-link:hover {
+  color: #3355ff;
+}
+
+.work-link .arrow {
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.work-link:hover .arrow {
+  transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+  .workstack-container {
+    padding: 2rem 1rem;
+  }
+
+  .work-card {
+    padding: 1.5rem;
+  }
+}
+</style>

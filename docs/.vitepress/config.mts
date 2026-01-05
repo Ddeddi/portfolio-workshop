@@ -31,6 +31,13 @@ export default defineConfig({
         href:
           'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=IBM+Plex+Serif&display=swap'
       }
+    ],
+    [
+      'link',
+      {
+        rel: 'stylesheet',
+        href: 'https://use.typekit.net/jpd1xno.css'
+      }
     ]
   ]
 })

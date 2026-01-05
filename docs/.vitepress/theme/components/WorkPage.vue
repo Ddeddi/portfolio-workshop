@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { withBase } from "vitepress";
 import { ref } from "vue";
-import NavBar from './NavBar.vue';
-<link rel="stylesheet" href="https://use.typekit.net/jpd1xno.css">;
+import NavBar from "./NavBar.vue";
 
 type Project = {
   slug: string;

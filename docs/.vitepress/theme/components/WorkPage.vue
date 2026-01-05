@@ -88,7 +88,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   background-color: #332f2fff;
   color: #e0e0e0;
   padding: 3rem 2rem;
-  font-family: "IBM Plex Mono", "Courier New", monospace;
+ font-family: "garamond-atf-text", serif;
   font-size: 0.95rem;
   line-height: 1.6;
 }

@@ -219,7 +219,7 @@ onMounted(() => {
 }
 
 .theme-square-light {
-  background-color: #f8f3e9;
+  background-color: #ffffffff;
 }
 
 .theme-square-dark {

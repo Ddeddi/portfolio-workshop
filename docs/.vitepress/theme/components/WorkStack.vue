@@ -103,7 +103,7 @@ const slides = cards.value.map((card) => ({
   right: 0;
   bottom: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 120px 40px rgba(188, 235, 60, 1);
+  box-shadow: inset 0 0 80px 40px rgba(188, 235, 60, 1);
   z-index: 1;
 }
 

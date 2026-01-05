@@ -3,7 +3,7 @@ import { useRoute } from "vitepress";
 import { computed } from "vue";
 import NavBar from "./NavBar.vue";
 
-@import <link rel="stylesheet" href="https://use.typekit.net/jpd1xno.css">
+<link rel="stylesheet" href="https://use.typekit.net/jpd1xno.css">
 
 const route = useRoute();
 const currentPath = computed(() => route.path.replace(/\/$/, ""));
@@ -64,7 +64,7 @@ const links = [
   right: 0;
   bottom: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 120px 40px rgba(188, 235, 60, 1);
+  box-shadow: inset 0 0 80px 40px rgba(188, 235, 60, 1);
   z-index: 1;
 }
 

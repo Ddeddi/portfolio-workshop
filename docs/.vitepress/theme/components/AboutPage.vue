@@ -151,7 +151,9 @@ const links = [
 .about-content :deep(.prose h2),
 .about-content :deep(.prose h3) {
   color: var(--theme-text, #ddd);
-  font-family: "garamond-atf-text", serif;
+  font-family: "petala-pro", sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.02em;
 }
 
 .about-content :deep(.prose a) {

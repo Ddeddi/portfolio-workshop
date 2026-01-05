@@ -132,10 +132,11 @@ const slides = cards.value.map((card) => ({
 
 .work-title {
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 900;
   color: var(--theme-text, #e0e0e0);
   margin: 0 0 0.5rem;
-  font-family: "garamond-atf-text", serif;
+  font-family: "petala-pro", sans-serif;
+  letter-spacing: -0.02em;
 }
 
 .work-author {

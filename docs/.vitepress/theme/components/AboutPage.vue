@@ -50,6 +50,19 @@ const links = [
   min-height: 100vh;
   padding: 2rem;
   font-family: "garamond-atf-text", serif;
+  position: relative;
+}
+
+.about-page-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 120px 40px rgba(191, 216, 125, 0.15);
+  z-index: 1;
 }
 
 .about-sidebar {

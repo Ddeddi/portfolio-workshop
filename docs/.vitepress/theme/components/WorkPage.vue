@@ -91,6 +91,19 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   font-family: "garamond-atf-text", serif;
   font-size: 0.95rem;
   line-height: 1.6;
+  position: relative;
+}
+
+.archive-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 120px 40px rgba(191, 216, 125, 0.15);
+  z-index: 1;
 }
 
 /* Header */

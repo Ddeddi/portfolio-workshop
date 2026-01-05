@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { withBase } from "vitepress";
 import { ref } from "vue";
+<link rel="stylesheet" href="https://use.typekit.net/jpd1xno.css">;
 
 type Project = {
   slug: string;
@@ -84,7 +85,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 <style scoped>
 .archive-container {
   min-height: 80vh;
-  background-color: #0a0a0a;
+  background-color: #332f2fff;
   color: #e0e0e0;
   padding: 3rem 2rem;
   font-family: "IBM Plex Mono", "Courier New", monospace;
@@ -106,11 +107,13 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   color: #0033ffff;
   margin: 0 0 0.5rem;
   letter-spacing: -0.02em;
+  font-family: "garamond-atf-text", serif;
 }
 
 .cursor-blink {
   animation: blink 1.2s infinite;
   color: #0033ffff;
+
 }
 
 @keyframes blink {
@@ -173,6 +176,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 
 .project-title {
   color: #0033ffff;
+  font-family: "garamond-atf-text", serif
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s ease;
@@ -181,6 +185,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 .project-title:hover {
   color: #0033ffff;
   text-decoration: underline;
+
 }
 
 .project-status {

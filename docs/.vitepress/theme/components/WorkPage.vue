@@ -85,7 +85,6 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 <style scoped>
 .archive-container {
   min-height: 100vh;
-  background-color: #2f2e2e;
   color: #e0e0e0;
   padding: 3rem 2rem;
   font-family: "garamond-atf-text", serif;

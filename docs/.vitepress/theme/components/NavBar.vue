@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useData, withBase, useRoute } from "vitepress";
-import { computed } from "vue";
+import { computed, ref, onMounted } from "vue";
 
 const { theme } = useData();
 const route = useRoute();
@@ -14,6 +14,29 @@ const isActive = (link: string) => {
     (navPath !== "" && currentPath.startsWith(navPath))
   );
 };
+
+// Theme toggle
+const isDark = ref(true);
+
+const setTheme = (dark: boolean) => {
+  isDark.value = dark;
+  if (dark) {
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  }
+};
+
+onMounted(() => {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "light") {
+    setTheme(false);
+  } else {
+    setTheme(true);
+  }
+});
 </script>
 
 <template>
@@ -24,6 +47,24 @@ const isActive = (link: string) => {
         <span class="archive-repo-name">~/portfolio</span>
         <span class="archive-separator">/</span>
         <span class="archive-ref">main</span>
+
+        <!-- Theme toggle -->
+        <div class="theme-toggle">
+          <button
+            @click="setTheme(false)"
+            class="theme-square theme-square-light"
+            :class="{ 'theme-square-active': !isDark }"
+            aria-label="Light mode"
+            title="Light mode"
+          ></button>
+          <button
+            @click="setTheme(true)"
+            class="theme-square theme-square-dark"
+            :class="{ 'theme-square-active': isDark }"
+            aria-label="Dark mode"
+            title="Dark mode"
+          ></button>
+        </div>
       </div>
 
       <!-- Navigation links -->
@@ -45,14 +86,15 @@ const isActive = (link: string) => {
 
 <style scoped>
 .archive-header {
-  background-color: #0a0a0a;
-  border-bottom: 1px solid #1a1a1a;
+  background-color: var(--theme-bg, #2f2e2e);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   font-family: "garamond-atf-text", serif;
   font-weight: 400;
   position: sticky;
   top: 0;
   z-index: 100;
   backdrop-filter: blur(8px);
+  transition: background-color 0.3s ease;
 }
 
 .archive-nav {
@@ -81,7 +123,7 @@ const isActive = (link: string) => {
 }
 
 .archive-separator {
-  color: #333;
+  color: #454444ff;
 }
 
 .archive-ref {
@@ -155,5 +197,46 @@ const isActive = (link: string) => {
     font-size: 0.9rem;
     padding: 0.3rem 0.7rem;
   }
+}
+
+/* Theme toggle */
+.theme-toggle {
+  display: flex;
+  gap: 0.35rem;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid #333;
+}
+
+.theme-square {
+  width: 18px;
+  height: 18px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  border-radius: 2px;
+}
+
+.theme-square-light {
+  background-color: #f8f3e9;
+}
+
+.theme-square-dark {
+  background-color: #2f2e2e;
+}
+
+.theme-square:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+.theme-square-active {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+.theme-square-active:hover {
+  transform: scale(1.15);
 }
 </style>

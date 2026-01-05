@@ -1,77 +1,84 @@
 <script setup lang="ts">
-import { withBase } from 'vitepress'
-import { ref } from 'vue'
+import { withBase } from "vitepress";
+import { ref } from "vue";
 
 type Project = {
-  slug: string
-  title: string
-  year: string
-  status: string
-  collaborators: string
-  tags: string[]
-  description: string
-  route: string
-}
+  slug: string;
+  title: string;
+  year: string;
+  status: string;
+  collaborators: string;
+  tags: string[];
+  description: string;
+  route: string;
+};
 
 // Raw markdown text for parsing frontmatter and content
-const markdownFiles = import.meta.glob('../../../works/**/index.md', {
-  as: 'raw',
-  eager: true
-})
+const markdownFiles = import.meta.glob("../../../works/**/index.md", {
+  as: "raw",
+  eager: true,
+});
 
-const projects = ref<Project[]>([])
+const projects = ref<Project[]>([]);
 
 // Simple frontmatter parser
 function parseFrontmatter(raw: string) {
-  const fmMatch = raw.match(/^---\n([\s\S]*?)\n---/)
-  if (!fmMatch) return {}
-  
-  const fmText = fmMatch[1]
-  const data: Record<string, any> = {}
-  
-  fmText.split('\n').forEach(line => {
-    const colonIdx = line.indexOf(':')
-    if (colonIdx === -1) return
-    
-    const key = line.slice(0, colonIdx).trim()
-    let value = line.slice(colonIdx + 1).trim()
-    
+  const fmMatch = raw.match(/^---\n([\s\S]*?)\n---/);
+  if (!fmMatch) return {};
+
+  const fmText = fmMatch[1];
+  const data: Record<string, any> = {};
+
+  fmText.split("\n").forEach((line) => {
+    const colonIdx = line.indexOf(":");
+    if (colonIdx === -1) return;
+
+    const key = line.slice(0, colonIdx).trim();
+    let value = line.slice(colonIdx + 1).trim();
+
     // Handle arrays (tags)
-    if (value.startsWith('[') && value.endsWith(']')) {
-      value = value.slice(1, -1).split(',').map(v => v.trim().replace(/['"]/g, ''))
+    if (value.startsWith("[") && value.endsWith("]")) {
+      value = value
+        .slice(1, -1)
+        .split(",")
+        .map((v) => v.trim().replace(/['"]/g, ""));
     }
-    
-    data[key] = value
-  })
-  
-  return data
+
+    data[key] = value;
+  });
+
+  return data;
 }
 
 for (const path in markdownFiles) {
-  const raw = markdownFiles[path] as string
-  const frontmatter = parseFrontmatter(raw)
-  const lines = raw.split('\n')
+  const raw = markdownFiles[path] as string;
+  const frontmatter = parseFrontmatter(raw);
+  const lines = raw.split("\n");
 
-  const titleLine = lines.find(line => line.startsWith('# '))
-  const match = path.match(/works\/([^/]+)\/index\.md$/)
-  const slug = match?.[1] ?? ''
+  const titleLine = lines.find((line) => line.startsWith("# "));
+  const match = path.match(/works\/([^/]+)\/index\.md$/);
+  const slug = match?.[1] ?? "";
 
-  const route = `/works/?id=${slug}`
+  const route = `/works/?id=${slug}`;
 
   projects.value.push({
     slug,
-    title: frontmatter.title || titleLine?.replace(/^# /, '') || 'Untitled',
-    year: frontmatter.year || '????',
-    status: frontmatter.status || 'archived',
-    collaborators: frontmatter.collaborators || frontmatter.with || '',
-    tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : (frontmatter.tags ? [frontmatter.tags] : []),
-    description: frontmatter.description || 'An experimental project.',
-    route
-  })
+    title: frontmatter.title || titleLine?.replace(/^# /, "") || "Untitled",
+    year: frontmatter.year || "????",
+    status: frontmatter.status || "archived",
+    collaborators: frontmatter.collaborators || frontmatter.with || "",
+    tags: Array.isArray(frontmatter.tags)
+      ? frontmatter.tags
+      : frontmatter.tags
+      ? [frontmatter.tags]
+      : [],
+    description: frontmatter.description || "An experimental project.",
+    route,
+  });
 }
 
 // Sort by year (most recent first)
-projects.value.sort((a, b) => b.year.localeCompare(a.year))
+projects.value.sort((a, b) => b.year.localeCompare(a.year));
 </script>
 
 <style scoped>
@@ -80,7 +87,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year))
   background-color: #0a0a0a;
   color: #e0e0e0;
   padding: 3rem 2rem;
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-family: garamond, serif;
   font-size: 0.95rem;
   line-height: 1.6;
 }
@@ -96,19 +103,25 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year))
 .archive-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #00d4ff;
+  color: #0033ffff;
   margin: 0 0 0.5rem;
   letter-spacing: -0.02em;
 }
 
 .cursor-blink {
   animation: blink 1.2s infinite;
-  color: #00d4ff;
+  color: #0033ffff;
 }
 
 @keyframes blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .archive-manifesto {
@@ -252,8 +265,13 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year))
   <div class="archive-container">
     <!-- Header -->
     <header class="archive-header">
-      <h1 class="archive-title">/projects<span class="cursor-blink">_</span></h1>
-      <p class="archive-manifesto">A living archive of experiments, collaborations, and unfinished thoughts.</p>
+      <h1 class="archive-title">
+        /projects<span class="cursor-blink">_</span>
+      </h1>
+      <p class="archive-manifesto">
+        A living archive of experiments, collaborations, and unfinished
+        thoughts.
+      </p>
     </header>
 
     <!-- Project List -->
@@ -266,10 +284,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year))
         <div class="project-line">
           <span class="project-year">{{ project.year }}</span>
           <span class="project-separator">→</span>
-          <a 
-            :href="withBase(project.route)" 
-            class="project-title"
-          >
+          <a :href="withBase(project.route)" class="project-title">
             {{ project.title }}
           </a>
           <span class="project-status">[{{ project.status }}]</span>
@@ -277,13 +292,9 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year))
             with: {{ project.collaborators }}
           </span>
         </div>
-        
+
         <div class="project-meta">
-          <span
-            v-for="tag in project.tags"
-            :key="tag"
-            class="project-tag"
-          >
+          <span v-for="tag in project.tags" :key="tag" class="project-tag">
             {{ tag }}
           </span>
         </div>

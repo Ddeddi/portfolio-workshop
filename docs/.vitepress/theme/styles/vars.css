@@ -4,12 +4,18 @@
 
 :root {
   --theme-bg: #f8f3e9;
-  --theme-text: #000000;
+  --theme-text: #1a1a1a;
+  --theme-text-muted: #666666;
+  --theme-border: rgba(0, 0, 0, 0.15);
+  --theme-accent: #0033ff;
 }
 
 .dark {
   --theme-bg: #2f2e2e;
-  --theme-text: #ffffff;
+  --theme-text: #e0e0e0;
+  --theme-text-muted: #999999;
+  --theme-border: rgba(255, 255, 255, 0.15);
+  --theme-accent: #0033ff;
 }
 
 /**

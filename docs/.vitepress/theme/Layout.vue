@@ -42,9 +42,10 @@ const currentPageComponent = computed(() => {
 <style scoped>
 .layout-wrapper {
   min-height: 100vh;
-  background-color: #0a0a0a;
-  color: #ccc;
+  background-color: var(--theme-bg, #2f2e2e);
+  color: var(--theme-text, #ffffff);
   font-family: "garamond-atf-text", serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .default-content {

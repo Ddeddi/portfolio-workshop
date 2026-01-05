@@ -46,11 +46,12 @@ const links = [
 
 <style scoped>
 .about-page-container {
-  background-color: #0a0a0a;
+  background-color: var(--theme-bg, #2f2e2e);
   min-height: 100vh;
   padding: 2rem;
   font-family: "garamond-atf-text", serif;
   position: relative;
+  transition: background-color 0.3s ease;
 }
 
 .about-page-container::before {
@@ -67,9 +68,11 @@ const links = [
 
 .about-sidebar {
   width: 100%;
-  background: #111;
-  border-right: 1px solid #222;
+  background: var(--theme-bg, #2f2e2e);
+  filter: brightness(0.95);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
   padding: 1.5rem;
+  transition: all 0.3s ease;
 }
 
 @media (min-width: 1024px) {
@@ -125,11 +128,13 @@ const links = [
 }
 
 .about-content {
-  background: #0f0f0f;
+  background: var(--theme-bg, #2f2e2e);
+  filter: brightness(0.95);
   width: 100%;
   padding: 2rem;
   overflow: auto;
-  color: #ccc;
+  color: var(--theme-text, #ffffff);
+  transition: all 0.3s ease;
 }
 
 @media (min-width: 1024px) {
@@ -139,13 +144,13 @@ const links = [
 }
 
 .about-content :deep(.prose) {
-  color: #ccc;
+  color: var(--theme-text-muted, #ccc);
 }
 
 .about-content :deep(.prose h1),
 .about-content :deep(.prose h2),
 .about-content :deep(.prose h3) {
-  color: #ddd;
+  color: var(--theme-text, #ddd);
   font-family: "garamond-atf-text", serif;
 }
 
@@ -160,7 +165,8 @@ const links = [
 
 .about-content :deep(.prose code) {
   color: #aaa;
-  background: #1a1a1a;
+  background: var(--theme-bg, #2f2e2e);
+  filter: brightness(0.85);
   padding: 0.2rem 0.4rem;
   border-radius: 3px;
   font-size: 0.9em;

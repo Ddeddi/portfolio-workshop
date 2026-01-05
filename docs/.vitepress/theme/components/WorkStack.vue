@@ -87,11 +87,12 @@ const slides = cards.value.map((card) => ({
 
 <style scoped>
 .workstack-container {
-  background-color: #0a0a0a;
+  background-color: var(--theme-bg, #2f2e2e);
   min-height: 100vh;
   padding: 3rem 2rem;
   font-family: "garamond-atf-text", serif;
   position: relative;
+  transition: background-color 0.3s ease;
 }
 
 .workstack-container::before {
@@ -114,10 +115,12 @@ const slides = cards.value.map((card) => ({
 }
 
 .work-card {
-  background: #111;
-  border: 1px solid #222;
+  background: var(--theme-bg, #2f2e2e);
+  filter: brightness(0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 4px;
   padding: 2rem;
+  transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 
@@ -130,20 +133,20 @@ const slides = cards.value.map((card) => ({
 .work-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #ddd;
+  color: var(--theme-text, #e0e0e0);
   margin: 0 0 0.5rem;
   font-family: "garamond-atf-text", serif;
 }
 
 .work-author {
   font-size: 1rem;
-  color: #888;
+  color: var(--theme-text-muted, #888);
   margin: 0 0 1.25rem;
   font-weight: 400;
 }
 
 .work-excerpt {
-  color: #aaa;
+  color: var(--theme-text-muted, #aaa);
   margin: 0 0 1.5rem;
   line-height: 1.6;
   font-size: 0.95rem;

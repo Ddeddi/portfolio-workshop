@@ -102,7 +102,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   bottom: 0;
   pointer-events: none;
   box-shadow: inset 0 0 100px 50px rgba(191, 216, 125, 0.6);
-  z-index: -1;
+  z-index: 0;
   filter: blur(40px);
 }
 

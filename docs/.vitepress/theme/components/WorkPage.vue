@@ -87,7 +87,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   background-color: #0a0a0a;
   color: #e0e0e0;
   padding: 3rem 2rem;
-  font-family: garamond, serif;
+  font-family: "IBM Plex Mono", "Courier New", monospace;
   font-size: 0.95rem;
   line-height: 1.6;
 }
@@ -149,7 +149,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 
 .project-entry:hover {
   background-color: #111;
-  border-left-color: #00d4ff;
+  border-left-color: #0033ffff;
   padding-left: 1.5rem;
 }
 
@@ -172,14 +172,14 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 }
 
 .project-title {
-  color: #00d4ff;
+  color: #0033ffff;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s ease;
 }
 
 .project-title:hover {
-  color: #00ffff;
+  color: #0033ffff;
   text-decoration: underline;
 }
 
@@ -213,8 +213,8 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 }
 
 .project-entry:hover .project-tag {
-  border-color: #00d4ff;
-  color: #00d4ff;
+  border-color: #0033ffff;
+  color: #0033ffff;
 }
 
 /* Description (hidden by default) */

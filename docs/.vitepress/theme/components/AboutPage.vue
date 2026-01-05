@@ -3,7 +3,7 @@ import { useRoute } from "vitepress";
 import { computed } from "vue";
 import NavBar from "./NavBar.vue";
 
-<link rel="stylesheet" href="https://use.typekit.net/jpd1xno.css">
+@import <link rel="stylesheet" href="https://use.typekit.net/jpd1xno.css">
 
 const route = useRoute();
 const currentPath = computed(() => route.path.replace(/\/$/, ""));

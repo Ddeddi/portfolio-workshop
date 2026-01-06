@@ -111,28 +111,47 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #999;
+  color: #1d4ed8;
   font-size: 0.9rem;
   letter-spacing: 0.02em;
 }
 
 .archive-repo-name {
-  color: #666;
+  color: #1d4ed8;
   font-family: monospace;
   font-size: 0.85rem;
 }
 
 .archive-separator {
-  color: #454444ff;
+  color: #1d4ed8;
 }
 
 .archive-ref {
-  color: #555;
+  color: #0f3bbd;
   font-family: monospace;
   font-size: 0.85rem;
   padding: 0.1rem 0.4rem;
-  background: #1a1a1a;
+  background: #e6edff;
+  border: 1px solid #bfd1ff;
   border-radius: 3px;
+}
+
+:global(.dark) .archive-breadcrumb {
+  color: #999;
+}
+
+:global(.dark) .archive-repo-name {
+  color: #666;
+}
+
+:global(.dark) .archive-separator {
+  color: #454444ff;
+}
+
+:global(.dark) .archive-ref {
+  color: #555;
+  background: #1a1a1a;
+  border: 1px solid transparent;
 }
 
 .archive-nav-links {

@@ -2,6 +2,7 @@
 import { withBase, useRoute } from "vitepress";
 import { ref, computed } from "vue";
 import NavBar from "./NavBar.vue";
+import { marked } from "marked";
 
 const route = useRoute();
 
@@ -110,7 +111,10 @@ const currentProject = computed(() => {
   if (!raw) return null;
 
   // Remove frontmatter and extract content
-  const content = raw.replace(/^---\n[\s\S]*?\n---\n/, "");
+  const markdownContent = raw.replace(/^---\n[\s\S]*?\n---\n/, "");
+
+  // Convert markdown to HTML
+  const content = marked(markdownContent);
 
   return {
     ...project,
@@ -148,7 +152,9 @@ const currentProject = computed(() => {
         </div>
       </header>
 
-      <div class="project-content" v-html="currentProject.content"></div>
+      <div class="project-content">
+        <div v-html="currentProject.content"></div>
+      </div>
     </div>
   </div>
 

@@ -5,10 +5,22 @@ import WorkPage from "./components/WorkPage.vue";
 import WorkStack from "./components/WorkStack.vue";
 import AboutPage from "./components/AboutPage.vue";
 import HeroSection from "./home-page-components/hero-section/HeroSection.vue";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 
 const { frontmatter, site } = useData();
 const route = useRoute();
+
+// Initialize dark mode early
+onMounted(() => {
+  if (typeof window !== "undefined") {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+      document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
+    }
+  }
+});
 
 // Remove base from the path so matching works in dev & GitHub Pages
 const normalizedPath = computed(() => {

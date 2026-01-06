@@ -103,9 +103,13 @@ const slides = cards.value.map((card) => ({
   right: 0;
   bottom: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 100px 50px rgba(191, 216, 125, 0.6);
+  box-shadow: inset 0 0 100px 50px rgba(191, 216, 125, 0.77);
   z-index: 0;
   filter: blur(40px);
+}
+
+:global(html:not(.dark)) .workstack-container::before {
+  box-shadow: inset 0 0 100px 50px rgba(0, 51, 255, 0.77);
 }
 
 .workstack-grid {
@@ -134,10 +138,14 @@ const slides = cards.value.map((card) => ({
 .work-title {
   font-size: 1.5rem;
   font-weight: 900;
-  color: var(--theme-text, #e0e0e0);
+  color: #0033ff;
   margin: 0 0 0.5rem;
   font-family: "petala-pro", sans-serif;
   letter-spacing: -0.02em;
+}
+
+:global(html:not(.dark)) .work-title {
+  color: #bfd87d;
 }
 
 .work-author {
@@ -167,6 +175,14 @@ const slides = cards.value.map((card) => ({
 
 .work-link:hover {
   color: #3355ff;
+}
+
+:global(html:not(.dark)) .work-link {
+  color: #bfd87d;
+}
+
+:global(html:not(.dark)) .work-link:hover {
+  color: #d0e89e;
 }
 
 .work-link .arrow {

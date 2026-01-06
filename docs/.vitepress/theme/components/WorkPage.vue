@@ -209,6 +209,7 @@ const currentProject = computed(() => {
   position: relative;
 }
 
+/* Dark mode: green shadow, light mode: blue shadow */
 .archive-container::before {
   content: "";
   position: fixed;
@@ -217,9 +218,13 @@ const currentProject = computed(() => {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 80px 50px rgba(0, 51, 255, 0.6);
+  box-shadow: inset 0 0 80px 50px rgba(191, 216, 125, 0.6);
   z-index: 0;
   filter: blur(40px);
+}
+
+:global(html:not(.dark)) .archive-container::before {
+  box-shadow: inset 0 0 80px 50px rgba(0, 51, 255, 0.6);
 }
 
 /* Header */
@@ -230,17 +235,26 @@ const currentProject = computed(() => {
   border-bottom: 1px solid #333;
 }
 
+/* Dark mode: blue text, light mode: green text */
 .archive-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #bfd87d;
+  color: #0033ff;
   margin: 0 0 0.5rem;
   letter-spacing: -0.02em;
   font-family: "garamond-atf-text", serif;
 }
 
+:global(html:not(.dark)) .archive-title {
+  color: #bfd87d;
+}
+
 .cursor-blink {
   animation: blink 1.2s infinite;
+  color: #0033ff;
+}
+
+:global(html:not(.dark)) .cursor-blink {
   color: #bfd87d;
 }
 
@@ -279,9 +293,14 @@ const currentProject = computed(() => {
 }
 
 .project-entry:hover {
+  background-color: rgba(0, 51, 255, 0.05);
+  border-left-color: #0033ff;
+  padding-left: 1.5rem;
+}
+
+:global(html:not(.dark)) .project-entry:hover {
   background-color: rgba(191, 216, 125, 0.05);
   border-left-color: #bfd87d;
-  padding-left: 1.5rem;
 }
 
 .project-line {
@@ -303,7 +322,7 @@ const currentProject = computed(() => {
 }
 
 .project-title {
-  color: #bfd87d;
+  color: #0033ff;
   font-family: "garamond-atf-text", serif;
   text-decoration: none;
   font-weight: 600;
@@ -311,8 +330,16 @@ const currentProject = computed(() => {
 }
 
 .project-title:hover {
-  color: #d0e89e;
+  color: #3355ff;
   text-decoration: underline;
+}
+
+:global(html:not(.dark)) .project-title {
+  color: #bfd87d;
+}
+
+:global(html:not(.dark)) .project-title:hover {
+  color: #d0e89e;
 }
 
 .project-status {
@@ -345,6 +372,11 @@ const currentProject = computed(() => {
 }
 
 .project-entry:hover .project-tag {
+  border-color: #0033ff;
+  color: #0033ff;
+}
+
+:global(html:not(.dark)) .project-entry:hover .project-tag {
   border-color: #bfd87d;
   color: #bfd87d;
 }
@@ -388,6 +420,10 @@ const currentProject = computed(() => {
 }
 
 .back-link:hover {
+  color: #0033ff;
+}
+
+:global(html:not(.dark)) .back-link:hover {
   color: #bfd87d;
 }
 
@@ -400,11 +436,15 @@ const currentProject = computed(() => {
 .project-detail-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #bfd87d;
+  color: #0033ff;
   margin: 0 0 1rem;
   letter-spacing: -0.02em;
   font-family: "garamond-atf-text", serif;
   line-height: 1.2;
+}
+
+:global(html:not(.dark)) .project-detail-title {
+  color: #bfd87d;
 }
 
 .project-detail-meta {
@@ -455,12 +495,16 @@ const currentProject = computed(() => {
 }
 
 .project-content :deep(a) {
-  color: #bfd87d;
+  color: #0033ff;
   text-decoration: none;
 }
 
 .project-content :deep(a:hover) {
   text-decoration: underline;
+}
+
+:global(html:not(.dark)) .project-content :deep(a) {
+  color: #bfd87d;
 }
 
 .project-content :deep(img) {

@@ -1,5 +1,5 @@
 ---
-title: Your Project Title
+title: GameWriter WriterGame
 year: 2024
 status: archived
 collaborators: Yunus Dikici, Svenja Meierkord 

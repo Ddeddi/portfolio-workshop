@@ -62,9 +62,13 @@ const links = [
   right: 0;
   bottom: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 100px 50px rgba(183, 237, 33, 0.6);
+  box-shadow: inset 0 0 100px 50px rgba(191, 216, 125, 0.6);
   z-index: -1;
   filter: blur(40px);
+}
+
+:global(html:not(.dark)) .about-page-container::before {
+  box-shadow: inset 0 0 100px 50px rgba(0, 51, 255, 0.6);
 }
 
 .about-sidebar {
@@ -117,6 +121,11 @@ const links = [
   background: rgba(0, 51, 255, 0.05);
 }
 
+:global(html:not(.dark)) .sidebar-link:hover {
+  color: #bfd87d;
+  background: rgba(191, 216, 125, 0.05);
+}
+
 .link-arrow {
   color: #333;
   transition: color 0.2s ease;
@@ -126,6 +135,10 @@ const links = [
 .sidebar-link:hover .link-arrow {
   color: #0033ff;
   transform: translateX(2px);
+}
+
+:global(html:not(.dark)) .sidebar-link:hover .link-arrow {
+  color: #bfd87d;
 }
 
 .about-content {

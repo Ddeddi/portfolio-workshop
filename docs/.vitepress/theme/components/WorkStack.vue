@@ -86,6 +86,13 @@ const slides = cards.value.map((card) => ({
 </script>
 
 <style scoped>
+@font-face {
+  font-family: "psycho";
+  src: url("/fonts/psycho/PSYCHO\ PERSONAL\ USE-SVG.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .workstack-container {
   background-color: var(--theme-bg, #2f2e2e);
   min-height: 100vh;
@@ -140,7 +147,7 @@ const slides = cards.value.map((card) => ({
   font-weight: 900;
   color: #0033ff;
   margin: 0 0 0.5rem;
-  font-family: "petala-pro", sans-serif;
+  font-family: "psycho", sans-serif;
   letter-spacing: -0.02em;
 }
 

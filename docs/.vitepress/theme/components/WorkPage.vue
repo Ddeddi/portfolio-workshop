@@ -466,16 +466,3 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   }
 }
 </style>
-
-html:not(.dark) .back-link:hover {
-  color: #bfd87d;
-}
-
-html:not(.dark) .project-detail-title {
-  color: #bfd87d;
-}
-
-html:not(.dark) .project-content :deep(a) {
-  color: #0033ff;
-}
-</style>

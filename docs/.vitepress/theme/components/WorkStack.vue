@@ -195,21 +195,3 @@ const slides = cards.value.map((card) => ({
   }
 }
 </style>
-<style>
-/* Light mode styles - not scoped */
-html:not(.dark) .workstack-container::before {
-  box-shadow: inset 0 0 100px 50px rgba(0, 51, 255, 0.77);
-}
-
-html:not(.dark) .work-title {
-  color: #bfd87d;
-}
-
-html:not(.dark) .work-link {
-  color: #bfd87d;
-}
-
-html:not(.dark) .work-link:hover {
-  color: #d0e89e;
-}
-</style>

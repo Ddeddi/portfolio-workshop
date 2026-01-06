@@ -466,37 +466,6 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   }
 }
 </style>
-<style>
-/* Light mode styles - not scoped */
-html:not(.dark) .archive-container::before {
-  box-shadow: inset 0 0 80px 50px rgba(0, 51, 255, 0.6);
-}
-
-html:not(.dark) .archive-title {
-  color: #bfd87d;
-}
-
-html:not(.dark) .cursor-blink {
-  color: #bfd87d;
-}
-
-html:not(.dark) .project-entry:hover {
-  background-color: rgba(191, 216, 125, 0.05);
-  border-left-color: #bfd87d;
-}
-
-html:not(.dark) .project-title {
-  color: #bfd87d;
-}
-
-html:not(.dark) .project-title:hover {
-  color: #d0e89e;
-}
-
-html:not(.dark) .project-entry:hover .project-tag {
-  border-color: #bfd87d;
-  color: #bfd87d;
-}
 
 html:not(.dark) .back-link:hover {
   color: #bfd87d;

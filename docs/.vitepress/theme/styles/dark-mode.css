@@ -1,0 +1,76 @@
+/* Light Mode Color Overrides */
+/* Apply these styles when html:not(.dark) */
+
+/* WorkPage.vue - Light mode colors */
+html:not(.dark) .archive-container::before {
+  box-shadow: inset 0 0 80px 50px rgba(0, 51, 255, 0.6) !important;
+}
+
+html:not(.dark) .archive-title {
+  color: #bfd87d !important;
+}
+
+html:not(.dark) .cursor-blink {
+  color: #bfd87d !important;
+}
+
+html:not(.dark) .project-entry:hover {
+  background-color: rgba(191, 216, 125, 0.05) !important;
+  border-left-color: #bfd87d !important;
+}
+
+html:not(.dark) .project-title {
+  color: #bfd87d !important;
+}
+
+html:not(.dark) .project-title:hover {
+  color: #d0e89e !important;
+}
+
+html:not(.dark) .project-entry:hover .project-tag {
+  border-color: #bfd87d !important;
+  color: #bfd87d !important;
+}
+
+html:not(.dark) .back-link:hover {
+  color: #bfd87d !important;
+}
+
+html:not(.dark) .project-detail-title {
+  color: #bfd87d !important;
+}
+
+html:not(.dark) .project-content a {
+  color: #0033ff !important;
+}
+
+/* WorkStack.vue - Light mode colors */
+html:not(.dark) .workstack-container::before {
+  box-shadow: inset 0 0 100px 50px rgba(0, 51, 255, 0.77) !important;
+}
+
+html:not(.dark) .work-title {
+  color: #bfd87d !important;
+}
+
+html:not(.dark) .work-link {
+  color: #bfd87d !important;
+}
+
+html:not(.dark) .work-link:hover {
+  color: #d0e89e !important;
+}
+
+/* AboutPage.vue - Light mode colors */
+html:not(.dark) .about-page-container::before {
+  box-shadow: inset 0 0 100px 50px rgba(0, 51, 255, 0.6) !important;
+}
+
+html:not(.dark) .sidebar-link:hover {
+  color: #bfd87d !important;
+  background: rgba(191, 216, 125, 0.05) !important;
+}
+
+html:not(.dark) .sidebar-link:hover .link-arrow {
+  color: #bfd87d !important;
+}

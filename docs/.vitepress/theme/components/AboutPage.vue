@@ -179,18 +179,3 @@ const links = [
   font-size: 0.9em;
 }
 </style>
-<style>
-/* Light mode styles - not scoped */
-html:not(.dark) .about-page-container::before {
-  box-shadow: inset 0 0 100px 50px rgba(0, 51, 255, 0.6);
-}
-
-html:not(.dark) .sidebar-link:hover {
-  color: #bfd87d;
-  background: rgba(191, 216, 125, 0.05);
-}
-
-html:not(.dark) .sidebar-link:hover .link-arrow {
-  color: #bfd87d;
-}
-</style>

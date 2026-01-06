@@ -4,6 +4,7 @@ import TwoslashFloatingVue from '@shikijs/vitepress-twoslash/client'
 import '@shikijs/vitepress-twoslash/style.css'
 import './styles/vars.css'
 import './styles/landing.css'
+import './styles/dark-mode.css'
 import "./tailwind.css";
 import type { Theme } from "vitepress";
 import Layout from './Layout.vue'

@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { withBase } from "vitepress";
-import { ref } from "vue";
+import { withBase, useRoute } from "vitepress";
+import { ref, computed } from "vue";
 import NavBar from "./NavBar.vue";
+
+const route = useRoute();
 
 type Project = {
   slug: string;
@@ -80,7 +82,114 @@ for (const path in markdownFiles) {
 
 // Sort by year (most recent first)
 projects.value.sort((a, b) => b.year.localeCompare(a.year));
+
+// Check if viewing a specific project
+const currentProjectId = computed(() => {
+  const params = new URLSearchParams(route.data?.relativePath ? '' : window.location.search);
+  return params.get('id');
+});
+
+// Get current project data and markdown content
+const currentProject = computed(() => {
+  const id = currentProjectId.value;
+  if (!id) return null;
+
+  const project = projects.value.find(p => p.slug === id);
+  if (!project) return null;
+
+  // Get the raw markdown content
+  const path = \`../../../works/\${id}/index.md\`;
+  const raw = markdownFiles[path];
+  if (!raw) return null;
+
+  // Remove frontmatter and extract content
+  const content = raw.replace(/^---\n[\s\S]*?\n---\n/, '');
+
+  return {
+    ...project,
+    content
+  };
+});
 </script>
+
+<template>
+  <NavBar />
+
+  <!-- Individual Project View -->
+  <div v-if="currentProject" class="archive-container">
+    <div class="project-detail">
+      <a :href="withBase('/works/')" class="back-link"> ← Back to projects </a>
+
+      <header class="project-detail-header">
+        <h1 class="project-detail-title">{{ currentProject.title }}</h1>
+        <div class="project-detail-meta">
+          <span class="project-year">{{ currentProject.year }}</span>
+          <span class="project-separator">•</span>
+          <span class="project-status">{{ currentProject.status }}</span>
+          <span v-if="currentProject.collaborators" class="project-with">
+            with {{ currentProject.collaborators }}
+          </span>
+        </div>
+        <div class="project-detail-tags">
+          <span
+            v-for="tag in currentProject.tags"
+            :key="tag"
+            class="project-tag"
+          >
+            {{ tag }}
+          </span>
+        </div>
+      </header>
+
+      <div class="project-content" v-html="currentProject.content"></div>
+    </div>
+  </div>
+
+  <!-- Project List View -->
+  <div v-else class="archive-container">
+    <!-- Header -->
+    <header class="project-header">
+      <h1 class="archive-title">
+        /projects<span class="cursor-blink">_</span>
+      </h1>
+      <p class="archive-manifesto">
+        A living archive of experiments, collaborations, and unfinished
+        thoughts.
+      </p>
+    </header>
+
+    <!-- Project List -->
+    <div class="project-list">
+      <div
+        v-for="project in projects"
+        :key="project.slug"
+        class="project-entry"
+      >
+        <div class="project-line">
+          <span class="project-year">{{ project.year }}</span>
+          <span class="project-separator">→</span>
+          <a :href="withBase(project.route)" class="project-title">
+            {{ project.title }}
+          </a>
+          <span class="project-status">[{{ project.status }}]</span>
+          <span v-if="project.collaborators" class="project-with">
+            with: {{ project.collaborators }}
+          </span>
+        </div>
+
+        <div class="project-meta">
+          <span v-for="tag in project.tags" :key="tag" class="project-tag">
+            {{ tag }}
+          </span>
+        </div>
+
+        <div class="project-description">
+          {{ project.description }}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .archive-container {
@@ -251,6 +360,140 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   margin-top: 0.75rem;
 }
 
+/* Individual Project View */
+.project-detail {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: #0033ff;
+}
+
+.project-detail-header {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #333;
+}
+
+.project-detail-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0033ff;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+  font-family: "garamond-atf-text", serif;
+  line-height: 1.2;
+}
+
+.project-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  color: #888;
+}
+
+.project-detail-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.project-content {
+  color: #ccc;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.project-content :deep(h1),
+.project-content :deep(h2),
+.project-content :deep(h3),
+.project-content :deep(h4) {
+  color: #ddd;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.project-content :deep(h1) {
+  font-size: 2rem;
+}
+
+.project-content :deep(h2) {
+  font-size: 1.5rem;
+}
+
+.project-content :deep(h3) {
+  font-size: 1.25rem;
+}
+
+.project-content :deep(p) {
+  margin-bottom: 1rem;
+}
+
+.project-content :deep(a) {
+  color: #0033ff;
+  text-decoration: none;
+}
+
+.project-content :deep(a:hover) {
+  text-decoration: underline;
+}
+
+.project-content :deep(img) {
+  max-width: 100%;
+  height: auto;
+  margin: 2rem 0;
+  border-radius: 4px;
+}
+
+.project-content :deep(code) {
+  background: #1a1a1a;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+  color: #aaa;
+}
+
+.project-content :deep(pre) {
+  background: #1a1a1a;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.project-content :deep(pre code) {
+  background: none;
+  padding: 0;
+}
+
+.project-content :deep(ul),
+.project-content :deep(ol) {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.project-content :deep(li) {
+  margin-bottom: 0.5rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .archive-container {
@@ -274,52 +517,13 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   .project-entry:hover {
     padding-left: 1rem;
   }
+
+  .project-detail-title {
+    font-size: 1.75rem;
+  }
+
+  .project-detail-meta {
+    font-size: 0.85rem;
+  }
 }
 </style>
-
-<template>
-  <NavBar />
-  <div class="archive-container">
-    <!-- Header -->
-    <header class="project-header">
-      <h1 class="archive-title">
-        /projects<span class="cursor-blink">_</span>
-      </h1>
-      <p class="archive-manifesto">
-        A living archive of experiments, collaborations, and unfinished
-        thoughts.
-      </p>
-    </header>
-
-    <!-- Project List -->
-    <div class="project-list">
-      <div
-        v-for="project in projects"
-        :key="project.slug"
-        class="project-entry"
-      >
-        <div class="project-line">
-          <span class="project-year">{{ project.year }}</span>
-          <span class="project-separator">→</span>
-          <a :href="withBase(project.route)" class="project-title">
-            {{ project.title }}
-          </a>
-          <span class="project-status">[{{ project.status }}]</span>
-          <span v-if="project.collaborators" class="project-with">
-            with: {{ project.collaborators }}
-          </span>
-        </div>
-
-        <div class="project-meta">
-          <span v-for="tag in project.tags" :key="tag" class="project-tag">
-            {{ tag }}
-          </span>
-        </div>
-
-        <div class="project-description">
-          {{ project.description }}
-        </div>
-      </div>
-    </div>
-  </div>
-</template>

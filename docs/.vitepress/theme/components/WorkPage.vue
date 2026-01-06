@@ -85,9 +85,8 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 
 // Check if viewing a specific project
 const currentProjectId = computed(() => {
-  const params = new URLSearchParams(
-    route.data?.relativePath ? "" : window.location.search
-  );
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
   return params.get("id");
 });
 
@@ -99,9 +98,15 @@ const currentProject = computed(() => {
   const project = projects.value.find((p) => p.slug === id);
   if (!project) return null;
 
-  // Get the raw markdown content
-  const path = `../../../works/${id}/index.md`;
-  const raw = markdownFiles[path];
+  // Find the raw markdown content by matching the slug
+  let raw: string | null = null;
+  for (const path in markdownFiles) {
+    if (path.includes(`works/${id}/index.md`)) {
+      raw = markdownFiles[path as keyof typeof markdownFiles] as string;
+      break;
+    }
+  }
+
   if (!raw) return null;
 
   // Remove frontmatter and extract content

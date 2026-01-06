@@ -44,7 +44,7 @@ onMounted(() => {
     <nav class="archive-nav">
       <!-- Repository-style breadcrumb -->
       <div class="archive-breadcrumb">
-        <span class="archive-repo-name">~/portfolio</span>
+        <span class="archive-repo-name">~/archive</span>
         <span class="archive-separator">/</span>
         <span class="archive-ref">main</span>
 

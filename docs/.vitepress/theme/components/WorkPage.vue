@@ -85,8 +85,10 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 
 // Check if viewing a specific project
 const currentProjectId = computed(() => {
-  const params = new URLSearchParams(route.data?.relativePath ? '' : window.location.search);
-  return params.get('id');
+  const params = new URLSearchParams(
+    route.data?.relativePath ? "" : window.location.search
+  );
+  return params.get("id");
 });
 
 // Get current project data and markdown content
@@ -94,20 +96,20 @@ const currentProject = computed(() => {
   const id = currentProjectId.value;
   if (!id) return null;
 
-  const project = projects.value.find(p => p.slug === id);
+  const project = projects.value.find((p) => p.slug === id);
   if (!project) return null;
 
   // Get the raw markdown content
-  const path = \`../../../works/\${id}/index.md\`;
+  const path = `../../../works/${id}/index.md`;
   const raw = markdownFiles[path];
   if (!raw) return null;
 
   // Remove frontmatter and extract content
-  const content = raw.replace(/^---\n[\s\S]*?\n---\n/, '');
+  const content = raw.replace(/^---\n[\s\S]*?\n---\n/, "");
 
   return {
     ...project,
-    content
+    content,
   };
 });
 </script>
@@ -210,7 +212,7 @@ const currentProject = computed(() => {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 80px 50px rgba(191, 216, 125, 0.6);
+  box-shadow: inset 0 0 80px 50px rgba(0, 51, 255, 0.6);
   z-index: 0;
   filter: blur(40px);
 }
@@ -226,7 +228,7 @@ const currentProject = computed(() => {
 .archive-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #0033ff;
+  color: #bfd87d;
   margin: 0 0 0.5rem;
   letter-spacing: -0.02em;
   font-family: "garamond-atf-text", serif;
@@ -234,7 +236,7 @@ const currentProject = computed(() => {
 
 .cursor-blink {
   animation: blink 1.2s infinite;
-  color: #0033ff;
+  color: #bfd87d;
 }
 
 @keyframes blink {
@@ -272,8 +274,8 @@ const currentProject = computed(() => {
 }
 
 .project-entry:hover {
-  background-color: rgba(0, 51, 255, 0.05);
-  border-left-color: #0033ff;
+  background-color: rgba(191, 216, 125, 0.05);
+  border-left-color: #bfd87d;
   padding-left: 1.5rem;
 }
 
@@ -296,7 +298,7 @@ const currentProject = computed(() => {
 }
 
 .project-title {
-  color: #0033ff;
+  color: #bfd87d;
   font-family: "garamond-atf-text", serif;
   text-decoration: none;
   font-weight: 600;
@@ -304,7 +306,7 @@ const currentProject = computed(() => {
 }
 
 .project-title:hover {
-  color: #3355ff;
+  color: #d0e89e;
   text-decoration: underline;
 }
 
@@ -338,8 +340,8 @@ const currentProject = computed(() => {
 }
 
 .project-entry:hover .project-tag {
-  border-color: #0033ff;
-  color: #0033ff;
+  border-color: #bfd87d;
+  color: #bfd87d;
 }
 
 /* Description (hidden by default) */
@@ -381,7 +383,7 @@ const currentProject = computed(() => {
 }
 
 .back-link:hover {
-  color: #0033ff;
+  color: #bfd87d;
 }
 
 .project-detail-header {
@@ -393,7 +395,7 @@ const currentProject = computed(() => {
 .project-detail-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #0033ff;
+  color: #bfd87d;
   margin: 0 0 1rem;
   letter-spacing: -0.02em;
   font-family: "garamond-atf-text", serif;
@@ -448,7 +450,7 @@ const currentProject = computed(() => {
 }
 
 .project-content :deep(a) {
-  color: #0033ff;
+  color: #bfd87d;
   text-decoration: none;
 }
 

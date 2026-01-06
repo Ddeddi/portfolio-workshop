@@ -1,5 +1,13 @@
-# Another < break > fast - performance 
-## Andrea Wapler 
+---
+title: Water In Conflicts
+year: 2025
+status: archived 
+tags: [essay, experimantal text, multi languague]
+description: Everyone is thirsty for peace 
+---
+
+# Water In Conflicts
+
 
 
 ## Abstract

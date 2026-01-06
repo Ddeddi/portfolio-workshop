@@ -101,13 +101,13 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   right: 0;
   bottom: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 100px 50px rgba(191, 216, 125, 0.6);
+  box-shadow: inset 0 0 80px 50px rgba(191, 216, 125, 0.6);
   z-index: 0;
   filter: blur(40px);
 }
 
 /* Header */
-.archive-header {
+.project-header {
   max-width: 1200px;
   margin: 0 auto 4rem;
   padding-bottom: 2rem;
@@ -281,7 +281,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   <NavBar />
   <div class="archive-container">
     <!-- Header -->
-    <header class="archive-header">
+    <header class="project-header">
       <h1 class="archive-title">
         /projects<span class="cursor-blink">_</span>
       </h1>

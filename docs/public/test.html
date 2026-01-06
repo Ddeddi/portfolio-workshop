@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html class="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>Dark Mode Test</title>
+  <style>
+    body { 
+      background: #2f2e2e; 
+      padding: 20px; 
+      color: white;
+      font-family: sans-serif;
+    }
+    
+    .test-box { 
+      padding: 40px; 
+      margin: 20px 0;
+      border: 2px solid white;
+      background: #333;
+    }
+    
+    /* Dark mode: blue text */
+    .test-title { 
+      color: #0033ff;
+      font-size: 2rem;
+    }
+    
+    /* Light mode: green text */
+    html:not(.dark) body {
+      background: #f5f5f5;
+      color: #333;
+    }
+    
+    html:not(.dark) .test-title { 
+      color: #bfd87d; 
+    }
+    
+    html:not(.dark) .test-box {
+      background: #fff;
+      border-color: #333;
+    }
+    
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 10px 5px;
+    }
+    
+    .status {
+      margin-top: 20px;
+      padding: 10px;
+      background: #444;
+      border-radius: 5px;
+      font-family: monospace;
+    }
+    
+    html:not(.dark) .status {
+      background: #e0e0e0;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="test-title">Dark/Light Mode Test</h1>
+  <div class="test-box">
+    <p><strong>Expected behavior:</strong></p>
+    <ul>
+      <li><strong>Dark mode:</strong> Title should be BLUE (#0033ff)</li>
+      <li><strong>Light mode:</strong> Title should be GREEN (#bfd87d)</li>
+    </ul>
+  </div>
+  
+  <button onclick="setDark()">Dark Mode</button>
+  <button onclick="setLight()">Light Mode</button>
+  <button onclick="toggle()">Toggle</button>
+  
+  <div class="status">
+    <div>Current mode: <span id="mode">unknown</span></div>
+    <div>HTML classes: <span id="classes">none</span></div>
+  </div>
+  
+  <script>
+    function updateStatus() {
+      const isDark = document.documentElement.classList.contains('dark');
+      document.getElementById('mode').textContent = isDark ? 'DARK' : 'LIGHT';
+      document.getElementById('classes').textContent = document.documentElement.className || '(empty)';
+    }
+    
+    function setDark() {
+      document.documentElement.classList.add('dark');
+      updateStatus();
+    }
+    
+    function setLight() {
+      document.documentElement.classList.remove('dark');
+      updateStatus();
+    }
+    
+    function toggle() {
+      document.documentElement.classList.toggle('dark');
+      updateStatus();
+    }
+    
+    // Initial status
+    updateStatus();
+  </script>
+</body>
+</html>

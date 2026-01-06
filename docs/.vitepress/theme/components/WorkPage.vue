@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { withBase, useRoute } from "vitepress";
-import { ref, computed } from "vue";
+import { withBase } from "vitepress";
+import { ref } from "vue";
 import NavBar from "./NavBar.vue";
-import { marked } from "marked";
-
-const route = useRoute();
 
 type Project = {
   slug: string;
@@ -83,83 +80,13 @@ for (const path in markdownFiles) {
 
 // Sort by year (most recent first)
 projects.value.sort((a, b) => b.year.localeCompare(a.year));
-
-// Check if viewing a specific project
-const currentProjectId = computed(() => {
-  if (typeof window === "undefined") return null;
-  const params = new URLSearchParams(window.location.search);
-  return params.get("id");
-});
-
-// Get current project data and markdown content
-const currentProject = computed(() => {
-  const id = currentProjectId.value;
-  if (!id) return null;
-
-  const project = projects.value.find((p) => p.slug === id);
-  if (!project) return null;
-
-  // Find the raw markdown content by matching the slug
-  let raw: string | null = null;
-  for (const path in markdownFiles) {
-    if (path.includes(`works/${id}/index.md`)) {
-      raw = markdownFiles[path as keyof typeof markdownFiles] as string;
-      break;
-    }
-  }
-
-  if (!raw) return null;
-
-  // Remove frontmatter and extract content
-  const markdownContent = raw.replace(/^---\n[\s\S]*?\n---\n/, "");
-
-  // Convert markdown to HTML
-  const content = marked(markdownContent);
-
-  return {
-    ...project,
-    content,
-  };
-});
 </script>
 
 <template>
   <NavBar />
 
-  <!-- Individual Project View -->
-  <div v-if="currentProject" class="archive-container">
-    <div class="project-detail">
-      <a :href="withBase('/works/')" class="back-link"> ← Back to projects </a>
-
-      <header class="project-detail-header">
-        <h1 class="project-detail-title">{{ currentProject.title }}</h1>
-        <div class="project-detail-meta">
-          <span class="project-year">{{ currentProject.year }}</span>
-          <span class="project-separator">•</span>
-          <span class="project-status">{{ currentProject.status }}</span>
-          <span v-if="currentProject.collaborators" class="project-with">
-            with {{ currentProject.collaborators }}
-          </span>
-        </div>
-        <div class="project-detail-tags">
-          <span
-            v-for="tag in currentProject.tags"
-            :key="tag"
-            class="project-tag"
-          >
-            {{ tag }}
-          </span>
-        </div>
-      </header>
-
-      <div class="project-content">
-        <div v-html="currentProject.content"></div>
-      </div>
-    </div>
-  </div>
-
   <!-- Project List View -->
-  <div v-else class="archive-container">
+  <div class="archive-container">
     <!-- Header -->
     <header class="project-header">
       <h1 class="archive-title">
@@ -229,10 +156,6 @@ const currentProject = computed(() => {
   filter: blur(40px);
 }
 
-:global(html:not(.dark)) .archive-container::before {
-  box-shadow: inset 0 0 80px 50px rgba(0, 51, 255, 0.6);
-}
-
 /* Header */
 .project-header {
   max-width: 1200px;
@@ -251,17 +174,9 @@ const currentProject = computed(() => {
   font-family: "garamond-atf-text", serif;
 }
 
-:global(html:not(.dark)) .archive-title {
-  color: #bfd87d;
-}
-
 .cursor-blink {
   animation: blink 1.2s infinite;
   color: #0033ff;
-}
-
-:global(html:not(.dark)) .cursor-blink {
-  color: #bfd87d;
 }
 
 @keyframes blink {
@@ -304,11 +219,6 @@ const currentProject = computed(() => {
   padding-left: 1.5rem;
 }
 
-:global(html:not(.dark)) .project-entry:hover {
-  background-color: rgba(191, 216, 125, 0.05);
-  border-left-color: #bfd87d;
-}
-
 .project-line {
   display: flex;
   align-items: baseline;
@@ -338,14 +248,6 @@ const currentProject = computed(() => {
 .project-title:hover {
   color: #3355ff;
   text-decoration: underline;
-}
-
-:global(html:not(.dark)) .project-title {
-  color: #bfd87d;
-}
-
-:global(html:not(.dark)) .project-title:hover {
-  color: #d0e89e;
 }
 
 .project-status {
@@ -382,16 +284,8 @@ const currentProject = computed(() => {
   color: #0033ff;
 }
 
-:global(html:not(.dark)) .project-entry:hover .project-tag {
-  border-color: #bfd87d;
-  color: #bfd87d;
-}
-
 /* Description (hidden by default) */
 .project-description {
-  margin: 0.5rem 0 0 4.5rem;
-  color: #aaa;
-  font-size: 0.9rem;
   font-style: italic;
   max-height: 0;
   overflow: hidden;
@@ -429,10 +323,6 @@ const currentProject = computed(() => {
   color: #0033ff;
 }
 
-:global(html:not(.dark)) .back-link:hover {
-  color: #bfd87d;
-}
-
 .project-detail-header {
   margin-bottom: 3rem;
   padding-bottom: 2rem;
@@ -447,10 +337,6 @@ const currentProject = computed(() => {
   letter-spacing: -0.02em;
   font-family: "garamond-atf-text", serif;
   line-height: 1.2;
-}
-
-:global(html:not(.dark)) .project-detail-title {
-  color: #bfd87d;
 }
 
 .project-detail-meta {
@@ -507,10 +393,6 @@ const currentProject = computed(() => {
 
 .project-content :deep(a:hover) {
   text-decoration: underline;
-}
-
-:global(html:not(.dark)) .project-content :deep(a) {
-  color: #bfd87d;
 }
 
 .project-content :deep(img) {
@@ -582,5 +464,49 @@ const currentProject = computed(() => {
   .project-detail-meta {
     font-size: 0.85rem;
   }
+}
+</style>
+<style>
+/* Light mode styles - not scoped */
+html:not(.dark) .archive-container::before {
+  box-shadow: inset 0 0 80px 50px rgba(0, 51, 255, 0.6);
+}
+
+html:not(.dark) .archive-title {
+  color: #bfd87d;
+}
+
+html:not(.dark) .cursor-blink {
+  color: #bfd87d;
+}
+
+html:not(.dark) .project-entry:hover {
+  background-color: rgba(191, 216, 125, 0.05);
+  border-left-color: #bfd87d;
+}
+
+html:not(.dark) .project-title {
+  color: #bfd87d;
+}
+
+html:not(.dark) .project-title:hover {
+  color: #d0e89e;
+}
+
+html:not(.dark) .project-entry:hover .project-tag {
+  border-color: #bfd87d;
+  color: #bfd87d;
+}
+
+html:not(.dark) .back-link:hover {
+  color: #bfd87d;
+}
+
+html:not(.dark) .project-detail-title {
+  color: #bfd87d;
+}
+
+html:not(.dark) .project-content :deep(a) {
+  color: #0033ff;
 }
 </style>

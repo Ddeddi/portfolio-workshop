@@ -115,10 +115,6 @@ const slides = cards.value.map((card) => ({
   filter: blur(40px);
 }
 
-:global(html:not(.dark)) .workstack-container::before {
-  box-shadow: inset 0 0 100px 50px rgba(0, 51, 255, 0.77);
-}
-
 .workstack-grid {
   max-width: 1200px;
   margin: 3rem auto 0;
@@ -151,10 +147,6 @@ const slides = cards.value.map((card) => ({
   letter-spacing: -0.02em;
 }
 
-:global(html:not(.dark)) .work-title {
-  color: #bfd87d;
-}
-
 .work-author {
   font-size: 1rem;
   color: var(--theme-text-muted, #888);
@@ -184,14 +176,6 @@ const slides = cards.value.map((card) => ({
   color: #3355ff;
 }
 
-:global(html:not(.dark)) .work-link {
-  color: #bfd87d;
-}
-
-:global(html:not(.dark)) .work-link:hover {
-  color: #d0e89e;
-}
-
 .work-link .arrow {
   transition: transform 0.2s ease;
   display: inline-block;
@@ -209,5 +193,23 @@ const slides = cards.value.map((card) => ({
   .work-card {
     padding: 1.5rem;
   }
+}
+</style>
+<style>
+/* Light mode styles - not scoped */
+html:not(.dark) .workstack-container::before {
+  box-shadow: inset 0 0 100px 50px rgba(0, 51, 255, 0.77);
+}
+
+html:not(.dark) .work-title {
+  color: #bfd87d;
+}
+
+html:not(.dark) .work-link {
+  color: #bfd87d;
+}
+
+html:not(.dark) .work-link:hover {
+  color: #d0e89e;
 }
 </style>

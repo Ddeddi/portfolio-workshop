@@ -121,11 +121,6 @@ const links = [
   background: rgba(0, 51, 255, 0.05);
 }
 
-:global(html:not(.dark)) .sidebar-link:hover {
-  color: #bfd87d;
-  background: rgba(191, 216, 125, 0.05);
-}
-
 .link-arrow {
   color: #333;
   transition: color 0.2s ease;
@@ -135,10 +130,6 @@ const links = [
 .sidebar-link:hover .link-arrow {
   color: #0033ff;
   transform: translateX(2px);
-}
-
-:global(html:not(.dark)) .sidebar-link:hover .link-arrow {
-  color: #bfd87d;
 }
 
 .about-content {
@@ -186,5 +177,20 @@ const links = [
   padding: 0.2rem 0.4rem;
   border-radius: 3px;
   font-size: 0.9em;
+}
+</style>
+<style>
+/* Light mode styles - not scoped */
+html:not(.dark) .about-page-container::before {
+  box-shadow: inset 0 0 100px 50px rgba(0, 51, 255, 0.6);
+}
+
+html:not(.dark) .sidebar-link:hover {
+  color: #bfd87d;
+  background: rgba(191, 216, 125, 0.05);
+}
+
+html:not(.dark) .sidebar-link:hover .link-arrow {
+  color: #bfd87d;
 }
 </style>

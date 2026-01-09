@@ -9,6 +9,7 @@ description:
 # Sable Mouvant - Installation 
 ## Andrea Wapler 
 
+![Sable Mouvant](./cover.jpg)
 
 ## Abstract
 Les sables mouvants, appelés aussi lises[1], sont des zones de sol semblant résistantes, mais ne pouvant supporter une certaine pression. Ils apparaissent sous certaines configurations comme un phénomène naturel.

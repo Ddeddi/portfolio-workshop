@@ -60,7 +60,7 @@ for (const path in markdownFiles) {
   const match = path.match(/works\/([^/]+)\/index\.md$/);
   const slug = match?.[1] ?? "";
 
-  const route = `/works/?id=${slug}`;
+  const route = `/works/${slug}/`;
 
   projects.value.push({
     slug,

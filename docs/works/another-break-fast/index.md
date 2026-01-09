@@ -7,6 +7,7 @@ description: If your routine would disfunction how would you react..
 ---
 # Another < break > fast - performance 
 
+![Another <br> fast - Toaster](./cover.jpeg)
 
 ## Abstract
 

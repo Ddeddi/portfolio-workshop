@@ -62,7 +62,7 @@ for (const path in markdownFiles) {
   const match = path.match(/works\/([^/]+)\/index\.md$/);
   const slug = match?.[1] ?? "";
 
-  const route = `/works/?id=${slug}`;
+  const route = `/works/${slug}/`;
 
   const folder = path.replace(/\/index\.md$/, "/");
   const imageKey = Object.keys(imageFiles).find((k) => k.startsWith(folder));
@@ -86,13 +86,6 @@ const slides = cards.value.map((card) => ({
 </script>
 
 <style scoped>
-@font-face {
-  font-family: "psycho";
-  src: url("/fonts/psycho/PSYCHO\ PERSONAL\ USE-SVG.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-}
-
 .workstack-container {
   background-color: var(--theme-bg, #2f2e2e);
   min-height: 100vh;
@@ -143,7 +136,7 @@ const slides = cards.value.map((card) => ({
   font-weight: 900;
   color: #0033ff;
   margin: 0 0 0.5rem;
-  font-family: "psycho", sans-serif;
+  font-family: "garamond-atf-text", serif;
   letter-spacing: -0.02em;
 }
 

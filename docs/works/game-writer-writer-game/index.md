@@ -1,5 +1,5 @@
 ---
-title: GameWriter WriterGame
+title: game-writer-writer-game
 year: 2024
 status: archived
 collaborators: Yunus Dikici, Svenja Meierkord 
@@ -7,38 +7,58 @@ tags: [interactive installation, game, interaction]
 ---
 
 # Game Writer Writer Game 
-## Andrea Wapler 
 
+![Game Writer Writer Game](./writer_game-01.jpg)
 
 ## Abstract
-Writer Game ist eine interaktive Installation. Sie besteht aus einer
-elektrischen Schreibmaschine, die mithilfe eines Arduino nicht nur eine
-Input-, sondern auch eine Output-Funktion abbilden kann. Somit lässt
-sich ein textbasiertes Spiel in Anlehnung an ein Textadventure mit der
-Schreibmaschine spielen, in dem die Spieler*innen Rätsel lösen müssen.
-Die Installation rekonstruiert einen Dialog zwischen Mensch und
-Maschine. Die Spieler*innen können mithilfe von Texteingaben das Spiel
-steuern und bekommen die Antworten von der Maschine als gedruckte
-Ausgabe.
+Writer Game is an interactive installation. It consists of an electric typewriter that, with the help of an Arduino, functions not only as an input device but also as an output device. This makes it possible to play a text-based game inspired by classic text adventures using the typewriter, in which players must solve puzzles.
+
+The installation reconstructs a dialogue between human and machine. Players can control the game through text input and receive the machine’s responses as printed output.
+
+![Game Writer Writer Game](./writer_game-02.jpg)
+
+
+## Starting Point
+The starting point for this project is an electric typewriter by Brother (Brother AX-210), which we date to the early 1990s.
+
+## Limitations
+
+The limitations of this project span three axes:
+
+- The text-based game severely restricts interaction with the game. Any graphical visualization can only be implemented using ASCII art.
+
+- The typewriter serves as an interesting medium to emphasize this first limitation.
+
+- The game runs on a microcontroller (ATmega2560). The technical constraints therefore directly affect the development process.
+
+
+## Typewriter–Microcontroller Interface
+The Arduino board acts as the central interface between the typewriter and the game. The microcontroller must be able to process keyboard inputs as well as print the game’s outputs using the typewriter.
+
+To achieve this, an interface designed as a PCB was developed. This interface is connected to both the original keyboard and the keyboard input of the typewriter. This allows keystrokes to be passed to the machine’s mainboard, which then prints them onto paper using the type wheel.
+
+![Game Writer Writer Game](./writer_game-03.jpg)
+![Game Writer Writer Game](./writer_game-04.jpg)
 
 
 
+## Text Adventure Game: WRITER GAME
+The first prototype of the game was developed in Python and later adapted as a template for the final version implemented on the Arduino in C/C++.
+
+The game code consists of various rooms. Depending on whether a puzzle is solved successfully, the game transitions to different subsequent rooms, resulting in a non-linear game flow. The rooms themselves are stored in arrays and reference the current and next room via corresponding indices.
+
+Because the Arduino provides less functionality than Python, a custom implementation for string comparison had to be created to solve the puzzles. Another important aspect of the implementation was the correct handling of pointers in order to reference the appropriate objects and variables.
+
+Finally, memory optimization became necessary because the global variable memory was exhausted. This issue was resolved by using flash memory.
+
+![Game Writer Writer Game](./writer_game-05.jpg)
 
 
-## Keywords
-Installation ; 
+## Story
+Our motivation for this project was to make a game playable without a display (a conventional pixel-based display). We developed a story and puzzles tailored to the typewriter and implemented them in the form of a text-based game.
 
+In the game, players solve puzzles by communicating with the typewriter. The plan is to further develop the game and the typewriter into a larger installation, enhanced with audio and lighting elements. Elements from the game are also intended to be represented physically (such as flea market stalls, which also appear in the game).
 
-
-## Motivation
-La formation du sable mouvant requiert un certain nombre de conditions spécifiques et ne peut être réalisée que dans un environnement très particulier. Il existe néanmoins divers sables mouvants qui se différencient par leur composition et sont les suivants.
-
-## Theoretical Context
-Le sable mouvant classique est constitué de sable, d'argile et d'eau et apparaît le plus souvent dans des zones humides comme au bord de plage, de marais ou de cours d’eau. C'est un milieu très instable qui peut se liquéfier en quelques secondes. Ce qui en fait la dangerosité est principalement ce sol lisse, qui paraît résistant et peut se rompre sous l’effet d’une contrainte, changeant d'aspect et passant d'un état solide à un état liquide de moins en moins visqueux, puis de plus en plus visqueux, revenant à un état solide aboutissant à un phénomène qui ressemble à la « prise » du béton. Ainsi la personne ou l'objet s’enfonce petit à petit sans pouvoir s’échapper. Le corps se retrouve ainsi bloqué dans un sable agissant comme de la mélasse. Le Mont Saint-Michel ou les déserts d'Iran figurent parmi les localisations les plus réputées pour ce type de sables mouvants.
-
-
-
-
-## Planned Outcome / Output Format
-Le sable mouvant « sec » est formé de grains de sable fins et clairs. L'absence d'eau le différencie des autres sables mouvants. Les sables mouvants secs sont le plus souvent situés dans des régions arides, par exemple dans les déserts en Iran. Ces sables mouvants « secs » contiennent 40 % de sable et 60 % d’air[3]. C'est la présence d'air qui fragilise la structure des grains de sable. L'air forme alors des cavités ou des trous qui vont rendre la structure granulaire instable. C’est pourquoi la substance change d’apparence en passant d’un état qui parait solide à un état qui ne l'est plus et où la moindre force appliquée peut ensevelir l’objet ou la personne. De plus, l'absence de poussée d'Archimède [réf. nécessaire] rend ce type de sable mouvant très dangereux, car celle-ci aurait dû empêcher le corps d'être enseveli. Le fesh-fesh se forme selon le même principe.
-
+![Game Writer Writer Game](./writer_game-06.jpg)
+![Game Writer Writer Game](./writer_game-07.jpg)
+ 

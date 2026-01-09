@@ -8,7 +8,7 @@ description: Everyone is thirsty for peace
 
 # Water In Conflicts
 
-
+![Water In Conflicts](./cover.jpeg)
 
 ## Abstract
 

@@ -22,7 +22,7 @@ const handleMouseMove = (event: MouseEvent) => {
 const setupScene = (
   scene: THREE.Scene,
   camera: THREE.PerspectiveCamera,
-  renderer: THREE.WebGLRenderer
+  renderer: THREE.WebGLRenderer,
 ) => {
   camera.position.z = -50;
 
@@ -51,7 +51,7 @@ const setupScene = (
     (progress) => {
       console.log(
         "Model loading:",
-        (progress.loaded / progress.total) * 100 + "%"
+        (progress.loaded / progress.total) * 100 + "%",
       );
     },
     (error) => {
@@ -62,7 +62,7 @@ const setupScene = (
       const cube = new THREE.Mesh(geometry, material);
       scene.add(cube);
       (window as any)._aboutPageMesh = cube;
-    }
+    },
   );
 
   // Renderer setup
@@ -111,7 +111,7 @@ onMounted(() => {
     <!-- Text Content (centered) -->
     <div class="content-wrapper">
       <div class="text-content">
-        <h1 class="about-title">About Me</h1>
+        <h1 class="about-title">Welcome to my project achive</h1>
 
         <p class="about-intro">
           I'm a creative technologist exploring the intersections of digital

@@ -82,12 +82,16 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
 
 const currentProjectSlug = computed(() => {
   const match = route.path.match(/\/works\/([^/]+)\/?$/);
-  return match?.[1] ?? null;
+  if (match?.[1]) return match[1];
+  return projects.value[0]?.slug ?? null; // fallback to most recent
 });
 
 const currentProject = computed(() => {
-  if (!currentProjectSlug.value) return null;
-  return projects.value.find((p) => p.slug === currentProjectSlug.value);
+  const slug = currentProjectSlug.value;
+  if (!slug) return null;
+  return (
+    projects.value.find((p) => p.slug === slug) ?? projects.value[0] ?? null
+  );
 });
 </script>
 
@@ -133,7 +137,9 @@ const currentProject = computed(() => {
     <div class="column column-center">
       <div v-if="currentProject" class="project-detail">
         <div class="detail-header">
-          <h1 class="detail-title">{{ currentProject.title }}</h1>
+          <h1 class="detail-title">
+            {{ currentProject.title }}<span class="cursor-blink">_</span>
+          </h1>
           <div class="divider"></div>
         </div>
 
@@ -192,7 +198,8 @@ const currentProject = computed(() => {
         <div class="panel-section">
           <h3 class="panel-title">Navigation</h3>
           <div class="divider small"></div>
-          <a href="/works/" class="nav-link">← Back to projects</a>
+          <a href="/about/" class="nav-link">← Back to about</a>
+          <a href="//" class="nav-link">← Back to home</a>
         </div>
 
         <div class="panel-section">
@@ -219,7 +226,7 @@ const currentProject = computed(() => {
 <style scoped>
 .three-column-layout {
   display: grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
+  grid-template-columns: 0.5fr 2.5fr 0.5fr;
   gap: 2rem;
   min-height: 100vh;
   background-color: #2a2a2a;
@@ -419,10 +426,26 @@ const currentProject = computed(() => {
 .detail-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #e8e8e8;
+  color: #0033ff;
   margin: 0 0 1rem 0;
   letter-spacing: -0.01em;
   line-height: 1.2;
+}
+
+.cursor-blink {
+  animation: blink 1.2s infinite;
+  color: #0033ff;
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .detail-metadata {
@@ -522,20 +545,20 @@ const currentProject = computed(() => {
 }
 
 .project-markdown :deep(a) {
-  color: #8899dd;
+  color: #0033ff;
   text-decoration: none;
-  border-bottom: 1px solid #666;
   transition: all 0.2s ease;
 }
 
 .project-markdown :deep(a:hover) {
-  color: #99aaee;
-  border-bottom-color: #8899dd;
+  color: #3355ff;
+  text-decoration: underline;
 }
 
 .project-markdown :deep(img) {
-  max-width: 100%;
+  width: 100%;
   height: auto;
+  object-fit: contain;
   margin: 2rem 0;
   border: 1px solid #444;
   display: block;
@@ -608,7 +631,7 @@ const currentProject = computed(() => {
 
 .nav-link {
   display: inline-block;
-  color: #8899dd;
+  color: #0033ff;
   text-decoration: none;
   font-size: 0.9rem;
   transition: all 0.2s ease;
@@ -616,8 +639,8 @@ const currentProject = computed(() => {
 }
 
 .nav-link:hover {
-  color: #99aaee;
-  border-bottom-color: #8899dd;
+  color: #0033ff;
+  border-bottom-color: #0033ff;
 }
 
 .quick-index {
@@ -639,8 +662,9 @@ const currentProject = computed(() => {
 }
 
 .index-item:hover {
-  border-left-color: #666;
-  color: #c5c5c5;
+  border-left-color: #0033ff;
+  color: #0033ff;
+  background-color: rgba(0, 51, 255, 0.08);
 }
 
 .index-item.active {

@@ -3,6 +3,7 @@ import { useData, useRoute } from "vitepress";
 import NavBar from "./components/NavBar.vue";
 import WorkPage from "./components/WorkPage.vue";
 import WorkStack from "./components/WorkStack.vue";
+import HomePage from "./components/HomePage.vue";
 import AboutPage from "./components/AboutPage.vue";
 import SingleWorkPage from "./components/SingleWorkPage.vue";
 import HeroSection from "./home-page-components/hero-section/HeroSection.vue";
@@ -31,10 +32,10 @@ const normalizedPath = computed(() => {
 });
 
 const currentPageComponent = computed(() => {
-  if (frontmatter.value.layout === "home") return WorkStack;
+  if (frontmatter.value.layout === "home") return HomePage;
 
   const path = normalizedPath.value.replace(/\/+$/, "/");
-  if (path === "/works/") return WorkPage;
+  if (path === "/works/") return SingleWorkPage;
   if (path.startsWith("/works/") && path !== "/works/") return SingleWorkPage;
 
   if (normalizedPath.value.startsWith("/about")) return AboutPage;

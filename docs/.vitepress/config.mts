@@ -29,7 +29,7 @@ export default defineConfig({
       {
         rel: 'stylesheet',
         href:
-          'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=IBM+Plex+Serif&family=Crimson+Text:ital@0;1&display=swap'
+          'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=IBM+Plex+Serif&display=swap'
       }
     ]
   ]

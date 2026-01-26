@@ -76,9 +76,10 @@ html:has(.landing) {
 
   h1 {
     text-align: center;
-    font-family: 'Manrope', sans-serif;
+    font-family: 'IBM Plex Serif', serif;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: uppercase;
     background: linear-gradient(
       180deg,
       #fff 0%,
@@ -111,10 +112,11 @@ html:has(.landing) {
   h2 {
     display: block;
     width: fit-content;
-    font-family: Manrope, sans-serif;
+    font-family: 'IBM Plex Serif', serif;
     font-size: 32px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: uppercase;
     line-height: 120%;
     letter-spacing: -0.64px;
     cursor: default;
@@ -130,10 +132,11 @@ html:has(.landing) {
   h3 {
     color: #a9a9a9;
     text-align: center;
-    font-family: Inter, sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-size: 20px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
+    text-transform: uppercase;
     line-height: 150%;
     letter-spacing: -0.4px;
     max-width: 500px;
@@ -155,10 +158,11 @@ html:has(.landing) {
     gap: 8px;
     border-radius: 8px;
     color: #fff;
-    font-family: Inter, sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-size: 16px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 600;
+    text-transform: uppercase;
     line-height: 24px;
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease-in-out;

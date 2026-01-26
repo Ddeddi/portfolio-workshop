@@ -151,7 +151,7 @@ projects.value.sort((a, b) => b.year.localeCompare(a.year));
   right: 0;
   bottom: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 80px 50px rgba(191, 216, 125, 0.6);
+  box-shadow: inset 0 0 10px 5px rgba(191, 216, 125, 0.6);
   z-index: 0;
   filter: blur(40px);
 }

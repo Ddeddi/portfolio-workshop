@@ -3,6 +3,8 @@
   <div class="workstack-container">
     <Carousel :slides="slides" autoplay :interval="5000" loop />
 
+    <TagMindMap />
+
     <div class="workstack-grid">
       <div v-for="card in cards" :key="card.slug" class="work-card">
         <h2 class="work-title">
@@ -25,6 +27,7 @@ import { ref } from "vue";
 import { withBase } from "vitepress";
 import Carousel from "./Carousel.vue";
 import NavBar from "./NavBar.vue";
+import TagMindMap from "./TagMindMap.vue";
 
 type Card = {
   slug: string;
@@ -44,7 +47,7 @@ const imageFiles = import.meta.glob(
   {
     eager: true,
     import: "default",
-  }
+  },
 );
 
 const cards = ref<Card[]>([]);
@@ -56,7 +59,7 @@ for (const path in markdownFiles) {
   const titleLine = lines.find((line) => line.startsWith("# "));
   const nameLine = lines.find((line) => line.startsWith("## "));
   const excerptLine = lines.find(
-    (line) => line.trim() && !line.startsWith("#")
+    (line) => line.trim() && !line.startsWith("#"),
   );
 
   const match = path.match(/works\/([^/]+)\/index\.md$/);

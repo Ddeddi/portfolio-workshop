@@ -24,7 +24,10 @@ const setupScene = (
   camera: THREE.PerspectiveCamera,
   renderer: THREE.WebGLRenderer,
 ) => {
-  camera.position.z = -50;
+  // Start camera inside the scene; near plane small to avoid clipping inside the mesh
+  camera.position.set(0, 0, 0);
+  camera.near = 0.01;
+  camera.updateProjectionMatrix();
 
   // Add lighting
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
@@ -37,13 +40,19 @@ const setupScene = (
   // Load your custom model
   const loader = new GLTFLoader();
   loader.load(
-    "/.vitepress/images/models/turning-stone-1.glb", // Update path to your model
+    "/.vitepress/images/models/stone-bark.glb", // Update path to your model
     (gltf) => {
       const model = gltf.scene;
 
       // Scale and position as needed
-      model.scale.set(1, 1, 0.5); // Adjust scale
-      model.position.set(0, -1, 0); // Adjust position
+      model.scale.set(25, 25, 25); // Adjust scale
+      model.position.set(0, 0, 0); // Adjust position
+
+      // Compute model center and move camera inside the mesh
+      const box = new THREE.Box3().setFromObject(model);
+      const center = box.getCenter(new THREE.Vector3());
+      camera.position.copy(center);
+      camera.lookAt(center.clone().add(new THREE.Vector3(0, 0, 1))); // look upward from inside
 
       scene.add(model);
       (window as any)._aboutPageMesh = model;

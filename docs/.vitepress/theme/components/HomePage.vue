@@ -1,22 +1,10 @@
 <script setup lang="ts">
-import { useRoute } from "vitepress";
-import { computed, ref, onMounted } from "vue";
 import NavBar from "./NavBar.vue";
 import ThreeScene from "./ThreeScene.vue";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-
-const route = useRoute();
-const mouseX = ref(0);
-const mouseY = ref(0);
-const rotationX = ref(0);
-const rotationY = ref(0);
-
-// Mouse tracking for interactivity
-const handleMouseMove = (event: MouseEvent) => {
-  mouseX.value = (event.clientX / window.innerWidth) * 2 - 1;
-  mouseY.value = -(event.clientY / window.innerHeight) * 2 + 1;
-};
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { onUnmounted } from "vue";
 
 // Scene setup function - called by ThreeScene component
 const setupScene = (
@@ -24,9 +12,29 @@ const setupScene = (
   camera: THREE.PerspectiveCamera,
   renderer: THREE.WebGLRenderer,
 ) => {
-  camera.position.z = 3;
+  camera.position.set(0, 0, 3);
+  camera.up.set(0, 0, 1); // rotate around Z axis
+  camera.lookAt(0, 0, 0);
 
-  // Add lighting
+  // OrbitControls: free rotation + bounded zoom, no pan
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableRotate = true;
+  controls.rotateSpeed = 0.5;
+  // Lock polar angle to keep orbit constrained to Z axis (up is Z now)
+  controls.minPolarAngle = Math.PI / 2;
+  controls.maxPolarAngle = Math.PI / 2;
+  controls.screenSpacePanning = false;
+  controls.enableZoom = true;
+  controls.zoomSpeed = 0.8;
+  controls.minDistance = 2; // prevent zooming inside the object
+  controls.maxDistance = 4.5; // keep object at least ~70% viewport size
+  controls.enablePan = false;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.5;
+
+  // Lighting
   const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
   scene.add(ambientLight);
 
@@ -34,29 +42,34 @@ const setupScene = (
   directionalLight.position.set(10, 10, 10);
   scene.add(directionalLight);
 
-  // Load the 3D model
+  const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+  directionalLight2.position.set(-10, -10, -10);
+  scene.add(directionalLight2);
+
+  // Model
   const loader = new GLTFLoader();
   loader.load(
     "/.vitepress/images/models/stone-bark.glb",
     (gltf) => {
       const model = gltf.scene;
-
-      // Scale and position as needed
       model.scale.set(1, 1, 1);
       model.position.set(0, 0, 0);
+
+      // Center pivot so auto-rotation spins around the object's own center
+      const box = new THREE.Box3().setFromObject(model);
+      const center = box.getCenter(new THREE.Vector3());
+      model.position.sub(center); // shift so center is at origin
+      controls.target.set(0, 0, 0); // rotate around origin
+      controls.minPolarAngle = Math.PI / 2;
+      controls.maxPolarAngle = Math.PI / 2;
+      controls.update();
 
       scene.add(model);
       (window as any)._homePageMesh = model;
     },
-    (progress) => {
-      console.log(
-        "Model loading:",
-        (progress.loaded / progress.total) * 100 + "%",
-      );
-    },
+    undefined,
     (error) => {
       console.error("Error loading model:", error);
-      // Fallback to sphere if model fails to load
       const geometry = new THREE.SphereGeometry(1, 32, 32);
       const material = new THREE.MeshPhongMaterial({ color: 0x8b7355 });
       const sphere = new THREE.Mesh(geometry, material);
@@ -65,44 +78,30 @@ const setupScene = (
     },
   );
 
-  // Renderer setup
   renderer.setClearColor(0x000000, 0);
   renderer.shadowMap.enabled = true;
+  renderer.domElement.style.pointerEvents = "auto";
 
-  // Animation loop with mouse interactivity
   const animate = () => {
     requestAnimationFrame(animate);
-
-    const mesh = (window as any)._homePageMesh;
-    if (mesh) {
-      // Smooth mouse-based rotation
-      rotationX.value += (mouseY.value * 2 - rotationX.value) * 0.05;
-      rotationY.value += (mouseX.value * 2 - rotationY.value) * 0.05;
-
-      mesh.rotation.x = rotationX.value;
-      mesh.rotation.y = rotationY.value;
-
-      // Auto-rotate if no mouse movement
-      if (Math.abs(mouseX.value) < 0.01 && Math.abs(mouseY.value) < 0.01) {
-        mesh.rotation.x += 0.003;
-        mesh.rotation.y += 0.005;
-      }
-    }
-
+    controls.update();
     renderer.render(scene, camera);
   };
 
   animate();
+  (window as any)._homePageControls = controls;
 };
 
-onMounted(() => {
-  window.addEventListener("mousemove", handleMouseMove);
+onUnmounted(() => {
+  if ((window as any)._homePageControls) {
+    (window as any)._homePageControls.dispose();
+  }
 });
 </script>
 
 <template>
   <NavBar />
-  <div class="home-page-container" @mousemove="handleMouseMove">
+  <div class="home-page-container">
     <!-- 3D Object Container (centered) -->
     <div class="three-d-container">
       <ThreeScene :setupScene="setupScene" height="100%" />
@@ -110,7 +109,7 @@ onMounted(() => {
 
     <!-- Text Overlay (optional) -->
     <div class="text-overlay">
-      <h1 class="title">Move your mouse to explore</h1>
+      <h1 class="title">Drag; Scroll; Discover Projects;</h1>
     </div>
   </div>
 </template>

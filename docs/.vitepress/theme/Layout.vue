@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar.vue";
 import WorkPage from "./components/WorkPage.vue";
 import WorkStack from "./components/WorkStack.vue";
 import AboutPage from "./components/AboutPage.vue";
+import SingleWorkPage from "./components/SingleWorkPage.vue";
 import HeroSection from "./home-page-components/hero-section/HeroSection.vue";
 import { computed, onMounted } from "vue";
 
@@ -32,9 +33,9 @@ const normalizedPath = computed(() => {
 const currentPageComponent = computed(() => {
   if (frontmatter.value.layout === "home") return WorkStack;
 
-  // Only use WorkPage for the works root list; let markdown render for /works/{slug}/
   const path = normalizedPath.value.replace(/\/+$/, "/");
   if (path === "/works/") return WorkPage;
+  if (path.startsWith("/works/") && path !== "/works/") return SingleWorkPage;
 
   if (normalizedPath.value.startsWith("/about")) return AboutPage;
   return null;
@@ -61,7 +62,9 @@ const currentPageComponent = computed(() => {
   background-color: var(--theme-bg, #2f2e2e);
   color: var(--theme-text, #ffffff);
   font-family: "garamond-atf-text", serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   position: relative;
 }
 

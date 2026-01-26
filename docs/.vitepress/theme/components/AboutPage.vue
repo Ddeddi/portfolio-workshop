@@ -24,26 +24,26 @@ const setupScene = (
   camera: THREE.PerspectiveCamera,
   renderer: THREE.WebGLRenderer
 ) => {
-  camera.position.z = 5;
+  camera.position.z = -50;
 
   // Add lighting
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
   scene.add(ambientLight);
 
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-  directionalLight.position.set(5, 5, 5);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+  directionalLight.position.set(10, 10, 10);
   scene.add(directionalLight);
 
   // Load your custom model
   const loader = new GLTFLoader();
   loader.load(
-    "/.vitepress/images/models/rotating-stone.glb", // Update path to your model
+    "/.vitepress/images/models/turning-stone-1.glb", // Update path to your model
     (gltf) => {
       const model = gltf.scene;
 
       // Scale and position as needed
-      model.scale.set(1, 1, 1); // Adjust scale
-      model.position.set(0, 0, 0); // Adjust position
+      model.scale.set(1, 1, 0.5); // Adjust scale
+      model.position.set(0, -1, 0); // Adjust position
 
       scene.add(model);
       (window as any)._aboutPageMesh = model;
@@ -186,8 +186,8 @@ html:not(.dark) .about-page-container::before {
   position: fixed;
   bottom: -200px;
   right: -150px;
-  width: 600px;
-  height: 600px;
+  width: 2000px;
+  height: 1000px;
   z-index: 1;
   pointer-events: auto;
   opacity: 0.9;

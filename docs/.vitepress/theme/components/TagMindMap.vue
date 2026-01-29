@@ -9,7 +9,11 @@
       <div
         v-for="node in nodes"
         :key="node.id"
-        :class="['node', node.type, { active: hoveredTag === node.id }]"
+        :class="[
+          'node',
+          node.type,
+          { active: hoveredTag === node.id, hovered: node.id === hoveredNode },
+        ]"
         :style="{
           left: node.x + 'px',
           top: node.y + 'px',
@@ -19,11 +23,12 @@
         @mouseleave="handleNodeLeave"
         @click="handleNodeClick(node)"
       >
-        <div class="node-content">
-          <span class="node-label">{{ node.label }}</span>
-          <span v-if="node.type === 'tag'" class="node-count">{{
-            node.projects?.length
-          }}</span>
+        <div class="node-dot"></div>
+        <div v-if="node.id === hoveredNode" class="node-tooltip">
+          {{ node.label }}
+          <span v-if="node.type === 'tag'" class="tooltip-count"
+            >({{ node.projects?.length }})</span
+          >
         </div>
       </div>
     </div>
@@ -63,6 +68,7 @@ const canvas = ref<HTMLCanvasElement | null>(null);
 const canvasContainer = ref<HTMLDivElement | null>(null);
 const nodes = ref<Node[]>([]);
 const hoveredTag = ref<string | null>(null);
+const hoveredNode = ref<string | null>(null);
 const router = useRouter();
 
 let ctx: CanvasRenderingContext2D | null = null;
@@ -132,8 +138,8 @@ function initializeNodes() {
       type: "tag",
       x,
       y,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
+      vx: 0,
+      vy: 0,
       scale: 1,
       projects: projectSlugs,
       connectedTo: projectSlugs.map((slug) => `project-${slug}`),
@@ -164,9 +170,9 @@ function initializeNodes() {
       type: "project",
       x,
       y,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      scale: 0.8,
+      vx: 0,
+      vy: 0,
+      scale: 1,
       route: work.route,
       tags: work.tags,
       connectedTo: work.tags.map((t) => `tag-${t}`),
@@ -176,82 +182,22 @@ function initializeNodes() {
   nodes.value = newNodes;
 }
 
-// Physics simulation
+// Physics simulation - subtle movement
 function updatePhysics() {
-  const damping = 0.95;
-  const springStrength = 0.01;
-  const repulsionStrength = 50000;
-  const centerStrength = 0.001;
+  const damping = 0.92;
 
   nodes.value.forEach((node) => {
     // Apply velocity
     node.x += node.vx;
     node.y += node.vy;
 
-    // Damping
+    // Strong damping - movement dies out quickly
     node.vx *= damping;
     node.vy *= damping;
 
-    // Center attraction
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const dx = centerX - node.x;
-    const dy = centerY - node.y;
-    node.vx += dx * centerStrength;
-    node.vy += dy * centerStrength;
-
-    // Boundary collision
-    const margin = 50;
-    if (node.x < margin) {
-      node.x = margin;
-      node.vx *= -0.5;
-    }
-    if (node.x > width - margin) {
-      node.x = width - margin;
-      node.vx *= -0.5;
-    }
-    if (node.y < margin) {
-      node.y = margin;
-      node.vy *= -0.5;
-    }
-    if (node.y > height - margin) {
-      node.y = height - margin;
-      node.vy *= -0.5;
-    }
-
-    // Repulsion from other nodes
-    nodes.value.forEach((other) => {
-      if (node.id === other.id) return;
-
-      const dx = node.x - other.x;
-      const dy = node.y - other.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-
-      if (dist > 0 && dist < 200) {
-        const force = repulsionStrength / (dist * dist);
-        node.vx += (dx / dist) * force;
-        node.vy += (dy / dist) * force;
-      }
-    });
-
-    // Spring attraction to connected nodes
-    if (node.connectedTo) {
-      node.connectedTo.forEach((connectedId) => {
-        const connected = nodes.value.find((n) => n.id === connectedId);
-        if (connected) {
-          const dx = connected.x - node.x;
-          const dy = connected.y - node.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const targetDist = node.type === "tag" ? 150 : 120;
-
-          if (dist > 0) {
-            const force = (dist - targetDist) * springStrength;
-            node.vx += (dx / dist) * force;
-            node.vy += (dy / dist) * force;
-          }
-        }
-      });
-    }
+    // Stop very small movements
+    if (Math.abs(node.vx) < 0.01) node.vx = 0;
+    if (Math.abs(node.vy) < 0.01) node.vy = 0;
   });
 }
 
@@ -304,27 +250,32 @@ function animate() {
 }
 
 function handleNodeHover(node: Node) {
+  hoveredNode.value = node.id;
+
   if (node.type === "tag") {
     hoveredTag.value = node.id;
 
-    // Highlight connected projects
+    // Subtle highlight for connected projects
     nodes.value.forEach((n) => {
       if (node.connectedTo?.includes(n.id)) {
-        gsap.to(n, { scale: 1, duration: 0.3 });
+        gsap.to(n, { scale: 1.05, duration: 0.3 });
       } else if (n.type === "project") {
-        gsap.to(n, { scale: 0.6, duration: 0.3 });
+        gsap.to(n, { scale: 0.95, duration: 0.3 });
       }
     });
 
-    gsap.to(node, { scale: 1.2, duration: 0.3 });
+    gsap.to(node, { scale: 1.1, duration: 0.3 });
+  } else {
+    gsap.to(node, { scale: 1.05, duration: 0.3 });
   }
 }
 
 function handleNodeLeave() {
   hoveredTag.value = null;
+  hoveredNode.value = null;
 
   nodes.value.forEach((n) => {
-    gsap.to(n, { scale: n.type === "tag" ? 1 : 0.8, duration: 0.3 });
+    gsap.to(n, { scale: 1, duration: 0.3 });
   });
 }
 
@@ -432,71 +383,92 @@ canvas {
   z-index: 20;
 }
 
-.node-content {
-  position: relative;
-  padding: 0.75rem 1.25rem;
-  border-radius: 50px;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.node.hovered {
+  z-index: 30;
+}
+
+.node-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.node.tag .node-content {
+.node.tag .node-dot {
   background: #0033ff;
-  border: 2px solid #0033ff;
-  padding: 1rem 1.5rem;
+  width: 16px;
+  height: 16px;
 }
 
-.node.project .node-content {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(0, 51, 255, 0.2);
+.node.project .node-dot {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(0, 51, 255, 0.3);
+  cursor: pointer;
 }
 
-.node:hover .node-content {
-  box-shadow: 0 6px 20px rgba(0, 51, 255, 0.3);
-  transform: scale(1.05);
-}
-
-.node.tag:hover .node-content {
-  background: #3355ff;
-  border-color: #3355ff;
-}
-
-.node.project.active .node-content {
-  background: rgba(0, 51, 255, 0.1);
+.node.project:hover .node-dot {
+  background: rgba(0, 51, 255, 0.2);
   border-color: #0033ff;
-  border-width: 2px;
+  border-width: 3px;
 }
 
-.node-label {
+.node:hover .node-dot {
+  box-shadow: 0 4px 16px rgba(0, 51, 255, 0.5);
+}
+
+.node.tag:hover .node-dot {
+  background: #3355ff;
+}
+
+.node.project.active .node-dot {
+  background: rgba(0, 51, 255, 0.3);
+  border-color: #0033ff;
+  border-width: 3px;
+}
+
+.node-tooltip {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-size: 0.875rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.2s ease;
 }
 
-.node.tag .node-label {
-  color: white;
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: lowercase;
+.node-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
 }
 
-.node.project .node-label {
-  color: #333;
-  font-size: 0.85rem;
-}
-
-.node-count {
-  background: rgba(255, 255, 255, 0.3);
-  color: white;
+.tooltip-count {
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.2rem 0.5rem;
-  border-radius: 20px;
-  min-width: 1.5rem;
-  text-align: center;
+  margin-left: 0.25rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 @media (max-width: 768px) {
@@ -512,20 +484,19 @@ canvas {
     font-size: 2rem;
   }
 
-  .node-content {
-    padding: 0.6rem 1rem;
+  .node-dot {
+    width: 10px;
+    height: 10px;
   }
 
-  .node.tag .node-content {
-    padding: 0.8rem 1.2rem;
+  .node.tag .node-dot {
+    width: 14px;
+    height: 14px;
   }
 
-  .node-label {
-    font-size: 0.8rem;
-  }
-
-  .node.tag .node-label {
-    font-size: 0.9rem;
+  .node-tooltip {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
   }
 }
 </style>

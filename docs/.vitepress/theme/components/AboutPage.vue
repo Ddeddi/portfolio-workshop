@@ -130,29 +130,17 @@ onMounted(() => {
         <div class="about-sections">
           <section class="section">
             <h2>Philosophy</h2>
-            <p>
-              I believe in the power of technology to enhance human creativity
-              and connection. My work focuses on creating experiences that are
-              both visually stunning and emotionally resonant.
-            </p>
+            <p>I believe ....</p>
           </section>
 
           <section class="section">
             <h2>Expertise</h2>
-            <p>
-              Specialized in web development, 3D graphics, interactive
-              installations, and creative coding. I use tools like Three.js,
-              VitePress, and custom web technologies to bring ideas to life.
-            </p>
+            <p>Specialized in ...</p>
           </section>
 
           <section class="section">
-            <h2>Vision</h2>
-            <p>
-              To create digital experiences that push boundaries and inspire
-              audiences. Each project is an opportunity to explore new
-              possibilities at the intersection of art and technology.
-            </p>
+            <h2>Contact</h2>
+            <p>You can reach me at:</p>
           </section>
         </div>
       </div>

@@ -2,6 +2,7 @@
 import { withBase, useRoute } from "vitepress";
 import { computed, ref } from "vue";
 import NavBar from "./NavBar.vue";
+import TagMindMap from "./TagMindMap.vue";
 
 type Project = {
   slug: string;
@@ -93,6 +94,11 @@ const currentProject = computed(() => {
     projects.value.find((p) => p.slug === slug) ?? projects.value[0] ?? null
   );
 });
+
+const isWorksIndexPage = computed(() => {
+  const path = route.path.replace(/\/+$/, "");
+  return path === "/works" || path.endsWith("/works");
+});
 </script>
 
 <template>
@@ -135,6 +141,11 @@ const currentProject = computed(() => {
     </div>
 
     <div class="column column-center">
+      <!-- Tag Mind Map Section - Only on /works/ index -->
+      <div v-if="isWorksIndexPage" class="mindmap-section">
+        <TagMindMap />
+      </div>
+
       <div v-if="currentProject" class="project-detail">
         <div class="detail-header">
           <h1 class="detail-title">
@@ -163,9 +174,14 @@ const currentProject = computed(() => {
           <div v-if="currentProject.tags.length" class="metadata-row">
             <span class="metadata-label">Tags:</span>
             <div class="tags-list">
-              <span v-for="tag in currentProject.tags" :key="tag" class="tag">
+              <a
+                v-for="tag in currentProject.tags"
+                :key="tag"
+                :href="withBase('/works/')"
+                class="tag"
+              >
                 {{ tag }}
-              </span>
+              </a>
             </div>
           </div>
         </div>
@@ -279,6 +295,31 @@ const currentProject = computed(() => {
   padding: 0 2rem;
   max-height: 100vh;
   overflow-y: auto;
+}
+
+.mindmap-section {
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid #444;
+}
+
+.mindmap-section :deep(.mindmap-container) {
+  padding: 2rem 0;
+  background: transparent;
+}
+
+.mindmap-section :deep(.mindmap-title) {
+  color: #e8e8e8;
+  font-size: 1.8rem;
+}
+
+.mindmap-section :deep(.mindmap-subtitle) {
+  color: #999;
+}
+
+.mindmap-section :deep(.canvas-wrapper) {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #444;
 }
 
 .column-right {
@@ -492,6 +533,16 @@ const currentProject = computed(() => {
   font-size: 0.8rem;
   color: #aaa;
   display: inline-block;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.tag:hover {
+  background-color: #333;
+  border-color: #777;
+  color: #e0e0e0;
+  transform: translateY(-1px);
 }
 
 .empty-state {
